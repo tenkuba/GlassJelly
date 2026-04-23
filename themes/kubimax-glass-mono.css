@@ -1,0 +1,58 @@
+/* KubiMax Glass — MONOCHROME (neutral tonal) */
+@import url("./_base.css");
+
+:root {
+    --theme-name: "KubiMax Glass — Monochrome";
+    --elegantFinFooterText: "KubiMax Glass — Monochrome";
+
+    --accent-100: #e5e5e5;
+    --accent-300: #a3a3a3;
+    --accent-400: #737373;
+    --accent-500: #525252;
+    --accent-600: #404040;
+    --accent-700: #262626;
+    --accent-rgb: 82, 82, 82;
+
+    --accent-alt: #fafafa;            /* bright white highlight */
+    --accent-alt-rgb: 250, 250, 250;
+
+    --bg-0: #0a0a0a;
+    --bg-1: #111111;
+    --bg-2: #1a1a1a;
+    --bg-rgb: 10, 10, 10;
+    --bg-gradient: radial-gradient(ellipse at 50% 0%, #1f1f1f 0%, #111111 55%, #050505 100%);
+
+    --darkerGradientPoint: var(--bg-0);
+    --lighterGradientPoint: var(--bg-2);
+    --darkerGradientPointAlpha: rgba(10,10,10,0.85);
+    --lighterGradientPointAlpha: rgba(26,26,26,0.6);
+    --headerColor: rgba(17,17,17,0.55);
+    --drawerColor: rgba(17,17,17,0.78);
+    --selectorBackgroundColor: rgba(82,82,82,0.45);
+    --activeColor: #e5e5e5;           /* monochrome uses near-white as the "active" for contrast */
+    --activeColorAlpha: rgba(229,229,229,0.9);
+    --uiAccentColor: #e5e5e5;
+    --btnMiniPlayColor: #262626;
+    --btnMiniPlayBorderColor: #a3a3a3;
+    --btnSubmitColor: #262626;
+    --btnSubmitBorderColor: #a3a3a3;
+    --checkboxCheckedBgColor: #e5e5e5;
+    --highlightOutlineColor: #fafafa;
+    --backgroundGradient: var(--bg-gradient);
+}
+
+/* Monochrome uses a white/near-white pill on dark base for primary actions,
+   with strong frosted glass rather than color glow. */
+:root .button-submit,
+:root .btnPlay {
+    background: linear-gradient(180deg, #fafafa, #d4d4d4) !important;
+    color: #0a0a0a !important;
+    border: 1px solid #ffffff !important;
+    text-shadow: none !important;
+    box-shadow: 0 4px 12px rgba(255,255,255,0.12), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+:root .button-submit:hover,
+:root .btnPlay:hover {
+    background: linear-gradient(180deg, #ffffff, #e5e5e5) !important;
+    box-shadow: 0 6px 18px rgba(255,255,255,0.2), 0 0 32px rgba(255,255,255,0.15);
+}

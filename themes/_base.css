@@ -1,0 +1,1305 @@
+/* ================================================================
+   KubiMax Glass — SHARED BASE  v3.0
+   Structural rules, glass surfaces, responsive layouts (web/mobile/TV),
+   login page, accessibility utilities, user toggle vars.
+   Theme files supply --accent-* and --bg-* tokens on top of this.
+   ================================================================ */
+
+/* ---------- FONTS (Montserrat, self-hosted) ---------- */
+@font-face { font-family:"Montserrat"; font-weight:300; font-style:normal; font-display:swap;
+    src:url("../fonts/Montserrat-Light.ttf") format("truetype"); }
+@font-face { font-family:"Montserrat"; font-weight:400; font-style:normal; font-display:swap;
+    src:url("../fonts/Montserrat-Regular.ttf") format("truetype"); }
+@font-face { font-family:"Montserrat"; font-weight:400; font-style:italic; font-display:swap;
+    src:url("../fonts/Montserrat-Italic.ttf") format("truetype"); }
+@font-face { font-family:"Montserrat"; font-weight:500; font-style:normal; font-display:swap;
+    src:url("../fonts/Montserrat-Medium.ttf") format("truetype"); }
+@font-face { font-family:"Montserrat"; font-weight:600; font-style:normal; font-display:swap;
+    src:url("../fonts/Montserrat-SemiBold.ttf") format("truetype"); }
+@font-face { font-family:"Montserrat"; font-weight:700; font-style:normal; font-display:swap;
+    src:url("../fonts/Montserrat-Bold.ttf") format("truetype"); }
+@font-face { font-family:"Montserrat"; font-weight:800; font-style:normal; font-display:swap;
+    src:url("../fonts/Montserrat-ExtraBold.ttf") format("truetype"); }
+@font-face { font-family:"Montserrat"; font-weight:900; font-style:normal; font-display:swap;
+    src:url("../fonts/Montserrat-Black.ttf") format("truetype"); }
+
+/* ================================================================
+   BASE TOKENS  — themes override --accent-*, --bg-*, bridge vars
+   ================================================================ */
+:root {
+    color-scheme: dark;
+
+    /* ── Radii ─────────────────────────────────────────────────── */
+    --largerRadius:  1.4em;
+    --largeRadius:   1.1em;
+    --smallRadius:   0.65em;
+    --smallerRadius: 0.4em;
+    --r-sm:  10px;
+    --r-md:  14px;
+    --r-lg:  20px;
+    --r-xl:  28px;
+    --r-pill: 999px;
+    --borderWidth: 1px;
+    --borderWidthDouble: 1.5px;
+
+    /* ── Blurs ──────────────────────────────────────────────────── */
+    --blurSmallest: blur(6px) saturate(140%);
+    --blurDefault:  blur(14px) saturate(160%);
+    --blurLarge:    blur(26px) saturate(180%);
+    --blurLargest:  blur(48px) saturate(180%);
+
+    /* ── Shadows ────────────────────────────────────────────────── */
+    --shadow:   0 8px 24px rgba(0,0,0,0.4);
+    --shadow-1: 0 2px 8px rgba(0,0,0,0.18);
+    --shadow-2: 0 8px 24px rgba(0,0,0,0.32);
+    --shadow-3: 0 16px 48px rgba(0,0,0,0.48);
+
+    /* ── Text ───────────────────────────────────────────────────── */
+    --textColor:    rgba(255,255,255,0.96);
+    --dimTextColor: rgba(255,255,255,0.62);
+    --fg-3:         rgba(255,255,255,0.48);
+    --fg-disabled:  rgba(255,255,255,0.28);
+
+    /* ── Borders ────────────────────────────────────────────────── */
+    --borderColor:        rgba(255,255,255,0.14);
+    --darkerBorderColor:  rgba(255,255,255,0.08);
+    --lighterBorderColor: rgba(255,255,255,0.22);
+    --defaultBorder:        var(--borderWidth) solid var(--borderColor);
+    --defaultLighterBorder: var(--borderWidth) solid var(--lighterBorderColor);
+
+    /* ── Status colors ──────────────────────────────────────────── */
+    --color-success: #4ade80;
+    --color-warning: #fbbf24;
+    --color-danger:  #f87171;
+    --color-info:    #60a5fa;
+
+    /* ── Destructive action buttons ─────────────────────────────── */
+    --btnDeleteColor:       #dc2626;
+    --btnDeleteBorderColor: #ef4444;
+    --btnDeleteGlow:        rgba(220,38,38,0.35);
+
+    /* ── Imagery ────────────────────────────────────────────────── */
+    --bgBlurHome:         blur(50px) saturate(120%);
+    --bgBrightnessDetail: 0.4;
+    /* Gradient mask on item detail backdrop — fades from bottom to transparent.
+       Override to "none" to disable. */
+    --itemBackdropMask: linear-gradient(180deg, rgba(0,0,0,0.75) 0%, 65%, transparent 100%);
+
+    /* ── Motion ─────────────────────────────────────────────────── */
+    --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --dur-fast:  120ms;
+    --dur-base:  200ms;
+    --dur-slow:  360ms;
+
+    /* ── Layout / spacing ───────────────────────────────────────── */
+    --sidePadding:   3.3%;
+    --itemColumnGap: 0.75em;
+    --appBarHeight:  4.5em;     /* used by header height + content offset */
+
+    /* ── Card grid ──────────────────────────────────────────────── */
+    --cardCount: 8;             /* columns in library grid — overridden by breakpoints */
+
+    /* ── Interaction ────────────────────────────────────────────── */
+    --touch-min:     44px;
+    --tv-font-scale: 1.15;
+    --tv-sidebar-w:  min(26vw, 300px);  /* room reserved by the always-visible TV sidebar */
+
+    /* ── Custom logo injection ──────────────────────────────────── */
+    /* Set --logoUrl to url("https://cdn.../assets/banner-light.png") to inject.
+       When undefined (default), Jellyfin's own logo renders normally.
+       banner-light.png (1631×463 RGBA) ships in assets/ of this repo. */
+    --logoHeight:   1.8em;
+    --logoMaxWidth: 180px;
+
+    /* ── Icon pack ──────────────────────────────────────────────── */
+    /* Override with "Material Symbols Rounded" if you prefer the newer icon style */
+    --iconPack: "Material Icons Round";
+
+    /* ── User-configurable visibility toggles ───────────────────── */
+    /* Set to "none" to hide, "block" (or "flex") to show */
+    --clearLogoVisibility:         block;   /* clear-art logo on detail page */
+    --itemTitleVisibility:         block;   /* card title text */
+    --libraryLabelVisibility:      block;   /* episode/item count badge */
+    --extraCardButtonsVisibility:  none;    /* additional overlay buttons */
+    --itemOriginalTitleVisibility: none;    /* original-language title subtitle */
+    --miniOverlayButtonVisibility: block;   /* mini play button on hover */
+    --headerBlurLayerVisibility:   visible; /* blur layer on header */
+
+    /* ── Login page customization ───────────────────────────────── */
+    /* Set --loginPageBgUrl to a URL string: url("https://...") */
+    --loginPageBgUrl:  none;
+    --loginPageText:   "";          /* overlay tagline on login page */
+
+    /* ── Footer stamp — each theme overrides ───────────────────── */
+    --elegantFinFooterText: "KubiMax Glass";
+
+    /* ── Fallback values — theme files MUST override these ──────── */
+    --bg-rgb:     10, 10, 10;
+    --bg-0:       #0a0a0a;
+    --bg-gradient: linear-gradient(135deg, #111, #1a1a2e);
+    --accent-rgb: 100, 100, 100;
+    --accent-100: #e5e5e5;
+    --accent-300: #a3a3a3;
+    --accent-400: #737373;
+    --accent-500: #525252;
+    --accent-600: #404040;
+    --accent-alt: #ffffff;
+    --headerColor: rgba(17,17,17,0.55);
+    --drawerColor: rgba(17,17,17,0.78);
+    --darkerGradientPointAlpha: rgba(10,10,10,0.85);
+
+    /* ── Jellyfin native variable bridge ────────────────────────── */
+    /* Maps our accent to the vars Jellyfin's Vue components consume */
+    --color-accent:            var(--accent-500);
+    --color-accent-foreground: #ffffff;
+    --theme-color:             var(--accent-500);
+    --accent-foreground-color: var(--accent-300);
+}
+
+/* ================================================================
+   TYPOGRAPHY
+   ================================================================ */
+html {
+    font-family: "Montserrat", system-ui, sans-serif !important;
+    font-weight: 400;
+    -webkit-tap-highlight-color: transparent !important;
+}
+h1, h2, h3, .detailPageTitle, .sectionTitle, .pageTitle {
+    font-family: "Montserrat", sans-serif !important;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+h1 { font-weight: 800; }
+h2 { font-size: 1.5em; }
+
+/* Icon font — controllable via --iconPack */
+.material-icons,
+.md-icon {
+    font-family: var(--iconPack), "Material Icons Round", sans-serif !important;
+    font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
+}
+
+/* ================================================================
+   GLOBAL CANVAS
+   ================================================================ */
+html,
+.nowPlayingPlaylist,
+.nowPlayingContextMenu,
+.backgroundContainer:not(.withBackdrop),
+.backgroundContainer:not(.backgroundContainer-transparent),
+.backdropContainer {
+    background: var(--bg-gradient) !important;
+    background-attachment: fixed !important;
+    background-color: var(--bg-0) !important;
+}
+
+/* ================================================================
+   HOMEPAGE — heavy blur + darkening overlay on backdrop
+   ================================================================ */
+.backgroundContainer.withBackdrop {
+    opacity: 1 !important;
+    background: rgba(var(--bg-rgb), 0.5) !important;
+}
+.backgroundContainer.withBackdrop .backdropImage {
+    filter: var(--bgBlurHome) brightness(0.85);
+    -webkit-filter: var(--bgBlurHome) brightness(0.85);
+    transform: scale(1.08);
+}
+
+/* ================================================================
+   ITEM DETAIL PAGE — no blur, 40 % brightness, gradient mask
+   ================================================================ */
+body:has(#itemDetailPage:not(.hide)) .backgroundContainer.withBackdrop .backdropImage,
+#itemDetailPage .backdropImage {
+    filter: brightness(var(--bgBrightnessDetail)) saturate(105%) !important;
+    -webkit-filter: brightness(var(--bgBrightnessDetail)) saturate(105%) !important;
+    transform: none !important;
+    /* Fade backdrop from opaque at top to transparent at bottom */
+    -webkit-mask: var(--itemBackdropMask);
+    mask: var(--itemBackdropMask);
+}
+body:has(#itemDetailPage:not(.hide)) .backgroundContainer.withBackdrop {
+    background: linear-gradient(
+        180deg,
+        rgba(var(--bg-rgb), 0.15) 0%,
+        rgba(var(--bg-rgb), 0.88) 85%
+    ) !important;
+}
+
+/* ================================================================
+   HEADER / APP BAR
+   ================================================================ */
+.skinHeader,
+.skinHeader-withBackground {
+    container-type: inline-size;
+    container-name: skinHeader;
+    min-height: var(--appBarHeight);
+    background: var(--headerColor) !important;
+    -webkit-backdrop-filter: var(--blurLarge);
+    backdrop-filter: var(--blurLarge);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 8px 24px rgba(0,0,0,0.25);
+}
+
+/* Hide section tabs (Suggested / Genres) when header is narrow */
+@container skinHeader (max-width: 768px) {
+    .headerTabs.sectionTabs { display: none !important; }
+}
+
+/* ================================================================
+   CUSTOM LOGO INJECTION
+   Replaces Jellyfin's default logo in the drawer and header.
+   Activate by setting --logoUrl in your theme or custom CSS:
+     :root { --logoUrl: url("https://cdn.../assets/banner-light.png"); }
+   When --logoUrl is not defined the browser falls back to normal
+   img rendering (Jellyfin's own logo shows unchanged).
+   ================================================================ */
+.adminDrawerLogo img,
+.headerLogo img,
+.headerImage img {
+    content: var(--logoUrl) !important;
+    height: var(--logoHeight) !important;
+    max-width: var(--logoMaxWidth) !important;
+    width: auto !important;
+    object-fit: contain;
+    display: block;
+}
+/* Drawer logo sizing — slightly taller since there's more room */
+.adminDrawerLogo img {
+    height: calc(var(--logoHeight) * 1.2) !important;
+    max-width: calc(var(--logoMaxWidth) * 1.1) !important;
+}
+
+/* ================================================================
+   DETAIL PAGE — transparent header
+   When the detail page is active the dark backdrop handles depth;
+   the frosted header would compete with it. We dissolve the header
+   into the backdrop for a cinematic full-bleed look.
+   Glass is still used everywhere else — this is a complement.
+   ================================================================ */
+body:has(#itemDetailPage:not(.hide)) .skinHeader,
+body:has(#itemDetailPage:not(.hide)) .skinHeader-withBackground {
+    background: rgba(var(--bg-rgb), 0.10) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    border-bottom-color: transparent !important;
+    box-shadow: none !important;
+    transition: background var(--dur-slow) var(--ease-out);
+}
+
+/* ================================================================
+   SIDEBAR DRAWER
+   ================================================================ */
+.mainDrawer,
+.drawer-open {
+    background: var(--drawerColor) !important;
+    -webkit-backdrop-filter: var(--blurLargest);
+    backdrop-filter: var(--blurLargest);
+    border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ================================================================
+   CARD ENTRY ANIMATION
+   ================================================================ */
+@keyframes kmgCardIn {
+    from { opacity: 0; transform: translateY(-5px) scale(0.985); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ================================================================
+   CARDS
+   ================================================================ */
+.cardScalable,
+.visualCardBox,
+.paperList {
+    border-radius: var(--largeRadius) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    transition:
+        transform    var(--dur-base) var(--ease-out),
+        border-color var(--dur-base),
+        box-shadow   var(--dur-base);
+}
+.visualCardBox {
+    background: rgba(var(--accent-rgb), 0.08) !important;
+    -webkit-backdrop-filter: var(--blurDefault);
+    backdrop-filter: var(--blurDefault);
+}
+/* Card entry animation */
+.card {
+    animation: kmgCardIn var(--dur-slow) var(--ease-out) forwards;
+}
+/* Allow glow / focus rings to escape overflow:hidden on children */
+.card-hoverable { overflow: visible !important; }
+
+/* Card title text */
+.cardText    { display: var(--itemTitleVisibility, block); }
+.cardTextLine2 { display: var(--itemTitleVisibility, block); }
+
+/* Count / episode badge */
+.countIndicator { display: var(--libraryLabelVisibility, block); }
+
+/* Extra overlay buttons */
+.cardOverlayButtonContainer-partial { display: var(--extraCardButtonsVisibility, none); }
+
+/* Mini play button */
+.cardOverlayButton.cardOverlayButton-br { display: var(--miniOverlayButtonVisibility, block); }
+
+/* Card grid — library view (not horizontal scrollers) */
+.itemsContainer {
+    display: grid !important;
+    grid-template-columns: repeat(var(--cardCount), minmax(0, 1fr)) !important;
+    padding-inline: var(--sidePadding) !important;
+    gap: var(--itemColumnGap) !important;
+}
+/* Horizontal scrollers keep flex layout */
+.emby-scroller .itemsContainer,
+.scrollSlider {
+    display: flex !important;
+    grid-template-columns: unset !important;
+    padding-inline: 0 !important;
+}
+
+/* ================================================================
+   HOVER EFFECTS — true pointer devices only
+   Touch devices (mobile) and TV D-pads are excluded.
+   ================================================================ */
+@media (hover: hover) and (pointer: fine) {
+    .card-hoverable:hover .cardScalable,
+    .card-hoverable:hover .visualCardBox {
+        border-color: var(--accent-300) !important;
+        box-shadow:
+            0 0 0 1px rgba(var(--accent-rgb), 0.6),
+            0 12px 32px rgba(0,0,0,0.5),
+            0 0 40px rgba(var(--accent-rgb), 0.25);
+    }
+    .card-hoverable:hover .cardImageContainer {
+        transform: scale(1.025);
+    }
+    .button-submit:hover,
+    .btnPlay:hover {
+        background: linear-gradient(180deg, var(--accent-400), var(--accent-500)) !important;
+        box-shadow: 0 6px 18px rgba(var(--accent-rgb),0.5), 0 0 32px rgba(var(--accent-rgb),0.35);
+        transform: translateY(-1px);
+    }
+    .detailButton:hover {
+        background: rgba(var(--accent-rgb), 0.4) !important;
+        border-color: var(--accent-300) !important;
+    }
+    .btnManual:hover {
+        background: linear-gradient(180deg, var(--accent-400), var(--accent-500)) !important;
+        box-shadow: 0 6px 20px rgba(var(--accent-rgb), 0.5) !important;
+    }
+}
+.cardImageContainer { transition: transform 0.375s; }
+
+/* ================================================================
+   BUTTONS — pill, glass, accent
+   ================================================================ */
+.button-submit,
+.raised.button-submit,
+.emby-button.button-submit,
+.btnPlay {
+    background: linear-gradient(180deg, var(--accent-500), var(--accent-600)) !important;
+    color: #fff !important;
+    border: 1px solid var(--accent-300) !important;
+    border-radius: var(--r-pill) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb),0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+    transition:
+        transform     150ms var(--ease-out),
+        box-shadow    var(--dur-base),
+        background    var(--dur-base);
+}
+.button-submit:active,
+.btnPlay:active { transform: translateY(0) scale(0.98); }
+
+.emby-button,
+.paper-icon-button-light,
+.raised,
+.detailButton {
+    border-radius: var(--r-pill) !important;
+    font-family: "Montserrat", sans-serif !important;
+    font-weight: 600 !important;
+}
+/* min-height only on named action buttons — NOT all emby-button
+   (header icon buttons are much smaller by design) */
+.button-submit,
+.btnPlay,
+.btnManual,
+.detailButton {
+    min-height: var(--touch-min);
+}
+.detailButton {
+    background: rgba(255,255,255,0.08) !important;
+    -webkit-backdrop-filter: var(--blurDefault);
+    backdrop-filter: var(--blurDefault);
+    border: 1px solid rgba(255,255,255,0.14) !important;
+    transition: background 150ms, border-color 150ms;
+}
+
+/* ================================================================
+   DESTRUCTIVE / DELETE BUTTONS
+   ================================================================ */
+.btnDelete,
+.btnDeleteItem,
+.btnDeleteLibraryItem,
+.button-delete,
+.button-cancel.button-delete,
+[data-action="delete"] > .emby-button,
+.confirmDialogOkButton.confirmDialogOkButton-delete {
+    background: linear-gradient(180deg, #ef4444, var(--btnDeleteColor)) !important;
+    color: #fff !important;
+    border: 1px solid var(--btnDeleteBorderColor) !important;
+    border-radius: var(--r-pill) !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 12px var(--btnDeleteGlow), inset 0 1px 0 rgba(255,255,255,0.1) !important;
+    transition: background var(--dur-base), box-shadow var(--dur-base);
+}
+@media (hover: hover) and (pointer: fine) {
+    .btnDelete:hover,
+    .btnDeleteItem:hover,
+    .button-delete:hover {
+        background: linear-gradient(180deg, #f87171, #ef4444) !important;
+        box-shadow: 0 6px 18px rgba(220,38,38,0.55), 0 0 28px rgba(220,38,38,0.3) !important;
+        transform: translateY(-1px);
+    }
+}
+
+/* ================================================================
+   DIALOGS
+   ================================================================ */
+.dialog {
+    background: var(--drawerColor) !important;
+    -webkit-backdrop-filter: var(--blurLargest);
+    backdrop-filter: var(--blurLargest);
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: var(--largeRadius) !important;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+}
+.dialogBackdropOpened { opacity: 0.66; }
+
+.formDialogContent,
+.dialogContent {
+    scroll-behavior: smooth;
+}
+
+/* ================================================================
+   FORM INPUTS
+   ================================================================ */
+.emby-input,
+.emby-textarea,
+.emby-select {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(255,255,255,0.14) !important;
+    border-radius: var(--smallRadius) !important;
+    color: var(--textColor) !important;
+    font-family: "Montserrat", sans-serif !important;
+    min-height: var(--touch-min);
+    transition: border-color 150ms, background 150ms, box-shadow 150ms;
+}
+.emby-input:focus,
+.emby-textarea:focus,
+.emby-select:focus {
+    border-color: var(--accent-300) !important;
+    background: rgba(255,255,255,0.1) !important;
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb),0.25);
+    outline: none;
+}
+
+/* ================================================================
+   TABS
+   ================================================================ */
+.emby-tab-button.is-active,
+.emby-tab-button-active {
+    color: var(--accent-300) !important;
+    border-bottom-color: var(--accent-500) !important;
+}
+
+/* ================================================================
+   PROGRESS BARS
+   ================================================================ */
+.itemProgressBarForeground,
+.playbackProgress > div,
+::-webkit-progress-value {
+    background: linear-gradient(90deg, var(--accent-500), var(--accent-alt, var(--accent-300))) !important;
+}
+progress,
+::-webkit-progress-bar {
+    background: rgba(255,255,255,0.08) !important;
+    border-radius: var(--smallRadius);
+    overflow: hidden;
+}
+
+/* ================================================================
+   SELECTION + FOCUS
+   ================================================================ */
+::selection { background: rgba(var(--accent-rgb), 0.55); color:#fff; }
+
+.emby-button:focus-visible,
+.paper-icon-button-light:focus-visible {
+    background-color: rgba(var(--accent-rgb), 0.25) !important;
+    color: #fff !important;
+    outline: 2px solid var(--accent-300) !important;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(var(--accent-rgb),0.35) !important;
+}
+.emby-button.show-focus:focus,
+.paper-icon-button-light.show-focus:focus {
+    background-color: var(--accent-500) !important;
+    color: #fff !important;
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb),0.45);
+}
+
+/* ================================================================
+   STAR RATING
+   ================================================================ */
+.starIcon {
+    background: linear-gradient(120deg, var(--accent-alt, var(--accent-300)), #f5c063) !important;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ================================================================
+   NOW PLAYING BAR
+   ================================================================ */
+.nowPlayingBar {
+    background: var(--drawerColor) !important;
+    -webkit-backdrop-filter: var(--blurLargest);
+    backdrop-filter: var(--blurLargest);
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+.appfooter {
+    background: var(--headerColor) !important;
+    -webkit-backdrop-filter: var(--blurLargest);
+    backdrop-filter: var(--blurLargest);
+}
+
+/* Player track buttons — accent-tinted for consistency */
+.btnSelectAudio,
+.btnSubtitles,
+.btnSelectSubtitles,
+.btnVideoOsdMenu,
+.btnVideoOsdSettings {
+    color: var(--accent-300) !important;
+    transition: color var(--dur-base), opacity var(--dur-base);
+}
+@media (hover: hover) and (pointer: fine) {
+    .btnSelectAudio:hover,
+    .btnSubtitles:hover,
+    .btnVideoOsdMenu:hover { opacity: 0.8; }
+}
+
+/* ================================================================
+   ITEM DETAIL PAGE — layout, clear logo, original title
+   ================================================================ */
+.detailPageWrapperContainer {
+    padding-top: unset;
+    margin-top: unset;
+}
+.layout-desktop .detailPageWrapperContainer {
+    background: linear-gradient(
+        180deg,
+        transparent,
+        17vh,
+        var(--darkerGradientPointAlpha) 50vh
+    );
+    min-height: 46vh;
+}
+
+/* Clear / transparent logo — base (mobile, TV, all) */
+.detailLogo,
+.logoContainer {
+    display: var(--clearLogoVisibility, block) !important;
+    max-width: 55%;
+    max-height: 8em;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 24px rgba(0,0,0,0.7))
+            drop-shadow(0 0 40px rgba(var(--accent-rgb), 0.2));
+}
+/* Desktop: float the logo into the backdrop area — cinematic */
+@media (hover: hover) and (pointer: fine) {
+    .detailPagePrimaryContainer { position: relative; }
+    .detailLogo,
+    .logoContainer {
+        position: absolute !important;
+        right: max(5%, var(--sidePadding));
+        top: 7vh;
+        max-width: 38% !important;
+        max-height: 13em !important;
+        z-index: 2;
+    }
+}
+.layout-mobile .detailLogo  { max-width: 75%; max-height: 6em; }
+.layout-tv     .detailLogo  { max-width: 40%; max-height: 7em; }
+
+/* Original-language title (e.g. Japanese beside English) */
+.originalTitle,
+.detailPageOriginalTitle {
+    display: var(--itemOriginalTitleVisibility, none) !important;
+    color: var(--dimTextColor);
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+/* ================================================================
+   CAST SECTION — circular actor images
+   ================================================================ */
+@supports (aspect-ratio: 1 / 1) {
+    #castContent .card,
+    .personCard {
+        aspect-ratio: 1 / 1;
+    }
+    #castContent .cardScalable,
+    #castContent .cardImageContainer,
+    .personCard .cardScalable,
+    .personCard .cardImageContainer {
+        border-radius: 50% !important;
+    }
+    /* Name label below circular portrait */
+    #castContent .cardText,
+    .personCard .cardText {
+        text-align: center;
+        font-size: 0.8em;
+        padding-top: 0.4em;
+    }
+}
+
+/* ================================================================
+   TOAST NOTIFICATIONS — glass surface
+   ================================================================ */
+.toast {
+    position: relative;
+    background: rgba(var(--bg-rgb), 0.72) !important;
+    -webkit-backdrop-filter: var(--blurLarge);
+    backdrop-filter: var(--blurLarge);
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    border-radius: var(--r-lg) !important;
+    box-shadow: var(--shadow-2), inset 0 1px 0 rgba(255,255,255,0.06);
+    color: var(--textColor) !important;
+    overflow: hidden;
+}
+/* Accent left bar — matches the current theme color */
+.toast::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--accent-300), var(--accent-600));
+    border-radius: var(--r-lg) 0 0 var(--r-lg);
+}
+
+/* ================================================================
+   CHAPTER THUMBNAILS — glass containers on seekbar
+   ================================================================ */
+.chapterThumb,
+.chapterButton {
+    border-radius: var(--r-md) !important;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.14) !important;
+    box-shadow: var(--shadow-2);
+    transition: transform var(--dur-base) var(--ease-out),
+                border-color var(--dur-base);
+}
+.chapterThumbContainer,
+.chapterButtonContainer {
+    background: rgba(var(--bg-rgb), 0.65) !important;
+    -webkit-backdrop-filter: var(--blurDefault);
+    backdrop-filter: var(--blurDefault);
+    border-radius: var(--r-lg) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    padding: 0.5em !important;
+    box-shadow: var(--shadow-2);
+}
+.chapterName {
+    color: var(--textColor) !important;
+    font-weight: 600;
+    font-size: 0.85em;
+}
+.chapterPositionText {
+    color: var(--dimTextColor) !important;
+    font-size: 0.75em;
+}
+@media (hover: hover) and (pointer: fine) {
+    .chapterThumb:hover,
+    .chapterButton:hover {
+        transform: scale(1.04);
+        border-color: var(--accent-300) !important;
+    }
+}
+
+/* ================================================================
+   SYNCPLAY — pulsing indicator animation
+   ================================================================ */
+@keyframes kmgPulse {
+    0%, 100% { transform: scale(1);    opacity: 1;   }
+    50%       { transform: scale(1.18); opacity: 0.65; }
+}
+
+.syncPlayIconCircle {
+    animation: kmgPulse 2s var(--ease-in-out) infinite;
+    color: var(--accent-300) !important;
+}
+.syncPlayEnabled .syncPlayIcon,
+.syncPlayEnabled .btnSyncPlay {
+    color: var(--accent-300) !important;
+}
+
+/* ================================================================
+   MEDIA FORMAT BADGES — asymmetric "peel" corners
+   One corner rounded diagonally = corner "sticker" feel.
+   ================================================================ */
+.mediaSourceIndicator,
+.resolutionIndicator,
+.videoQualityBadge,
+.mediaInfoTag {
+    border-radius: 0 var(--r-sm) 0 var(--r-sm) !important;
+    background: rgba(var(--bg-rgb), 0.72) !important;
+    -webkit-backdrop-filter: var(--blurSmallest);
+    backdrop-filter: var(--blurSmallest);
+    border: 1px solid rgba(var(--accent-rgb), 0.28) !important;
+    color: var(--accent-300) !important;
+    font-size: 0.7em;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 0.15em 0.45em !important;
+}
+/* Played / watched indicator — bottom-right peel */
+.playedIndicator { border-radius: 0 0 var(--r-md) 0 !important; }
+/* Episode count badge — top-left peel */
+.countIndicator  { border-radius: var(--r-sm) 0 var(--r-sm) 0 !important; }
+
+/* ================================================================
+   SLIDER THUMB MICROINTERACTION
+   Thumb "stretches" vertically when dragging — tactile feedback.
+   ================================================================ */
+input[type="range"]::-webkit-slider-thumb {
+    transition: transform 100ms var(--ease-out),
+                background var(--dur-base);
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: var(--accent-400) !important;
+    transform: scale(1.25);
+}
+input[type="range"]::-webkit-slider-thumb:active {
+    background: var(--accent-300) !important;
+    transform: scale(0.8, 2.2);  /* becomes a vertical bar on drag */
+}
+/* Track base color */
+input[type="range"]::-webkit-slider-runnable-track {
+    background: rgba(255,255,255,0.12);
+    border-radius: var(--r-pill);
+    height: 3px;
+}
+
+/* ================================================================
+   SCROLLBAR
+   ================================================================ */
+::-webkit-scrollbar              { width:10px; height:10px; }
+::-webkit-scrollbar-track        { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.12);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover  { background: var(--accent-500); background-clip: padding-box; }
+
+/* ================================================================
+   FOOTER STAMP
+   ================================================================ */
+.dashboardFooter::after,
+#myPreferencesMenuPage > div:after {
+    content: var(--elegantFinFooterText, "KubiMax Glass");
+    display: block;
+    text-align: center;
+    color: rgba(255,255,255,0.35);
+    font-size: 0.8em;
+    padding: 1em 0;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+/* ================================================================
+   LOGIN PAGE — Glassmorphism + user-configurable background
+   ================================================================ */
+#loginPage {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 100dvh;
+    background-color: var(--bg-0, #0a0a0a) !important;
+    /* When --loginPageBgUrl is undefined, falls back to theme gradient.
+       Set --loginPageBgUrl to url("https://...") to use a custom wallpaper. */
+    background-image: var(--loginPageBgUrl, var(--bg-gradient, linear-gradient(135deg,#0d0d0d,#1a1a2e))) !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+}
+
+/* Optional tagline overlay — visible when --loginPageText is set */
+#loginPage::before {
+    content: var(--loginPageText, "");
+    display: block;
+    position: absolute;
+    bottom: 2.5em;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.45);
+    font-size: 0.8em;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* Frosted-glass card — handles both old (10.9) and new (10.10+) layouts */
+#loginPage .padded-left.padded-right.padded-top,
+#loginPage .loginFormFields,
+#loginPage .centerFocus,
+.loginPage-wrapper,
+.manualLoginForm {
+    background: rgba(var(--bg-rgb), 0.55) !important;
+    -webkit-backdrop-filter: var(--blurLarge);
+    backdrop-filter: var(--blurLarge);
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    border-radius: var(--largeRadius) !important;
+    box-shadow: var(--shadow-3), inset 0 1px 0 rgba(255,255,255,0.06);
+    padding: 2.5em !important;
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+}
+#loginPage h1 {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--textColor) !important;
+    margin-bottom: 0.5em;
+}
+#loginPage h1::after {
+    content: "";
+    display: block;
+    height: 3px;
+    width: 2em;
+    margin-top: 0.4em;
+    background: linear-gradient(90deg, var(--accent-500), var(--accent-300));
+    border-radius: 2px;
+}
+#loginPage .serverAddressInfo,
+#loginPage .loginDisclaimer,
+#loginPage .disclaimerText {
+    color: var(--dimTextColor) !important;
+    font-size: 0.875em;
+    margin-bottom: 1.25em;
+}
+#loginPage .card,
+#loginPage .userCard,
+#loginPage .userCardBox {
+    background: rgba(var(--accent-rgb), 0.1) !important;
+    border: 1px solid rgba(var(--accent-rgb), 0.25) !important;
+    border-radius: var(--largeRadius) !important;
+    -webkit-backdrop-filter: var(--blurDefault);
+    backdrop-filter: var(--blurDefault);
+    transition: background var(--dur-base) var(--ease-out), border-color var(--dur-base);
+}
+@media (hover: hover) and (pointer: fine) {
+    #loginPage .card:hover,
+    #loginPage .userCard:hover {
+        background: rgba(var(--accent-rgb), 0.22) !important;
+        border-color: var(--accent-300) !important;
+    }
+}
+.btnManual {
+    background: linear-gradient(180deg, var(--accent-500), var(--accent-600)) !important;
+    color: #fff !important;
+    border: 1px solid var(--accent-300) !important;
+    border-radius: var(--r-pill) !important;
+    min-height: var(--touch-min);
+    font-weight: 600 !important;
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.35) !important;
+    transition: background var(--dur-base) var(--ease-out), box-shadow var(--dur-base) !important;
+}
+.btnForgotPassword {
+    color: var(--accent-300) !important;
+    font-size: 0.875em;
+    opacity: 0.85;
+    transition: opacity var(--dur-fast);
+}
+@media (hover: hover) and (pointer: fine) {
+    .btnForgotPassword:hover { opacity: 1; }
+}
+#quickConnectSection,
+.quickConnectSection {
+    background: rgba(255,255,255,0.05) !important;
+    border: var(--defaultBorder) !important;
+    border-radius: var(--largeRadius) !important;
+    margin-top: 1.25em;
+    padding: 1.25em !important;
+}
+.quickConnectCode,
+.quickConnectCodeText {
+    color: var(--accent-300) !important;
+    font-weight: 700;
+    font-size: 1.6em;
+    letter-spacing: 0.12em;
+}
+
+/* ================================================================
+   CARD COUNT — responsive breakpoints (em = scales with user font size)
+   Override --cardCount after these breakpoints to tune per-theme.
+   ================================================================ */
+@media (max-width: 250em) { :root { --cardCount: 10; } }
+@media (max-width: 200em) { :root { --cardCount: 9;  } }
+@media (max-width: 160em) { :root { --cardCount: 8;  } }
+@media (max-width: 120em) { :root { --cardCount: 7;  } }
+@media (max-width: 90em)  { :root { --cardCount: 6;  } }
+@media (max-width: 70em)  { :root { --cardCount: 5;  } }
+@media (max-width: 50em)  { :root { --cardCount: 4;  } }
+@media (max-width: 35em)  { :root { --cardCount: 3;  } }
+
+/* ================================================================
+   MOBILE LAYOUT  (.layout-mobile)
+   ================================================================ */
+.layout-mobile {
+    --itemColumnGap: 0.5em;
+    --sidePadding: 4%;
+    --touch-min: 48px;
+    --cardCount: 3;
+}
+@media (max-width: 25em) {
+    .layout-mobile { --cardCount: 2; }
+}
+
+/* Safe-area insets — notched phones */
+.layout-mobile .skinHeader {
+    padding-top:   env(safe-area-inset-top, 0px);
+    padding-left:  max(1em, env(safe-area-inset-left, 0px));
+    padding-right: max(1em, env(safe-area-inset-right, 0px));
+}
+.layout-mobile .appfooter,
+.layout-mobile .nowPlayingBar {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left:   max(var(--sidePadding), env(safe-area-inset-left, 0px));
+    padding-right:  max(var(--sidePadding), env(safe-area-inset-right, 0px));
+}
+.layout-mobile .mainContent,
+.layout-mobile .scrollY,
+.layout-mobile .contentScrollContainer {
+    padding-left:  env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+}
+.layout-mobile .appfooter {
+    background: rgba(var(--bg-rgb), 0.92) !important;
+    -webkit-backdrop-filter: var(--blurLargest);
+    backdrop-filter: var(--blurLargest);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.3);
+}
+.layout-mobile .emby-button,
+.layout-mobile .paper-icon-button-light,
+.layout-mobile .headerButton,
+.layout-mobile .navMenuOption,
+.layout-mobile .emby-tab-button {
+    min-height: var(--touch-min);
+    min-width:  var(--touch-min);
+}
+.layout-mobile .cardScalable { border-radius: var(--largeRadius) !important; }
+.layout-mobile .mainDrawer {
+    width: min(80vw, 320px) !important;
+    box-shadow: 4px 0 40px rgba(0,0,0,0.65);
+}
+.layout-mobile .emby-scroller {
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+}
+.layout-mobile .scrollSlider > * { scroll-snap-align: start; }
+.layout-mobile .sectionTitle,
+.layout-mobile .sectionTitleContainer {
+    padding-left:  var(--sidePadding);
+    padding-right: var(--sidePadding);
+    font-size: 1.05em;
+}
+.layout-mobile #loginPage .padded-left.padded-right.padded-top,
+.layout-mobile #loginPage .loginFormFields,
+.layout-mobile #loginPage .centerFocus,
+.layout-mobile .loginPage-wrapper,
+.layout-mobile .manualLoginForm {
+    max-width: 100% !important;
+    padding: 2em 1.5em !important;
+    margin: 1em !important;
+    width: calc(100% - 2em) !important;
+}
+/* Mobile detail page logo */
+.layout-mobile .detailLogo { max-width: 75%; max-height: 6em; }
+
+/* Header auto-hide when scrolling down — Jellyfin adds headroom classes */
+.layout-mobile .headroom--unpinned {
+    transform: translateY(-115%);
+    transition: transform var(--dur-slow) var(--ease-in-out);
+}
+.layout-mobile .headroom--pinned {
+    transform: translateY(0);
+    transition: transform var(--dur-slow) var(--ease-in-out);
+}
+
+/* ================================================================
+   TV LAYOUT  (.layout-tv)
+   ================================================================ */
+.layout-tv {
+    --sidePadding: 4%;
+    --touch-min: 52px;
+    --cardCount: 5;
+    font-size: calc(1em * var(--tv-font-scale));
+}
+@media (min-width: 160em) {
+    .layout-tv { --cardCount: 6; }
+}
+
+/* No mouse cursor — TV uses remote / D-pad */
+.layout-tv,
+.layout-tv * { cursor: none !important; }
+
+/* ── TV Performance: disable heavy blur (GPU cost on SmartTV SoCs) ── */
+.layout-tv .skinHeader,
+.layout-tv .skinHeader-withBackground {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: rgba(var(--bg-rgb), 0.95) !important;
+}
+.layout-tv .mainDrawer,
+.layout-tv .drawer-open {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: rgba(var(--bg-rgb), 0.97) !important;
+}
+.layout-tv .nowPlayingBar {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: rgba(var(--bg-rgb), 0.97) !important;
+}
+.layout-tv .appfooter {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: rgba(var(--bg-rgb), 0.95) !important;
+}
+/* Dialogs can keep blur — shown infrequently */
+.layout-tv .visualCardBox {
+    -webkit-backdrop-filter: var(--blurDefault);
+    backdrop-filter: var(--blurDefault);
+}
+
+/* ── TV Header ──────────────────────────────────────────────── */
+.layout-tv .skinHeader {
+    min-height: calc(var(--appBarHeight) * 1.15);
+    padding-left:  var(--sidePadding);
+    padding-right: var(--sidePadding);
+}
+
+/* ── TV Sidebar nav ─────────────────────────────────────────── */
+.layout-tv .mainDrawer {
+    border-right: 1px solid rgba(255,255,255,0.1);
+}
+.layout-tv .navMenuOption {
+    min-height: var(--touch-min);
+    padding: 0 1.5em;
+    transition: background var(--dur-base) var(--ease-out), border-color var(--dur-base);
+}
+.layout-tv .navMenuOption:focus,
+.layout-tv .navMenuOption-selected {
+    background: rgba(var(--accent-rgb), 0.28) !important;
+    border-left: 3px solid var(--accent-300) !important;
+    color: var(--accent-100) !important;
+    outline: none !important;
+}
+
+/* ── TV Detail page — compensate for always-visible sidebar ── */
+.layout-tv .detailPageWrapperContainer,
+.layout-tv .detailPagePrimaryContainer {
+    padding-left: var(--tv-sidebar-w) !important;
+}
+.layout-tv .itemBackdrop,
+.layout-tv .detailImageContainer {
+    left: var(--tv-sidebar-w) !important;
+    width: calc(100% - var(--tv-sidebar-w)) !important;
+}
+
+/* ── TV FOCUS SYSTEM ────────────────────────────────────────── */
+
+/* Cards */
+.layout-tv .card-hoverable:focus .cardScalable,
+.layout-tv .card:focus .cardScalable,
+.layout-tv .card-hoverable:focus-within .cardScalable {
+    outline: 3px solid var(--accent-300) !important;
+    outline-offset: 2px !important;
+    border-color: var(--accent-300) !important;
+    box-shadow:
+        0 0 0 5px rgba(var(--accent-rgb), 0.4),
+        0 0 32px rgba(var(--accent-rgb), 0.55),
+        0 8px 32px rgba(0,0,0,0.5) !important;
+    transform: scale(1.06) !important;
+    overflow: visible !important;
+    z-index: 2;
+}
+.layout-tv .card-hoverable:focus,
+.layout-tv .card:focus { z-index: 2; outline: none !important; }
+
+/* All interactive buttons + links */
+.layout-tv .emby-button:focus,
+.layout-tv .paper-icon-button-light:focus,
+.layout-tv .raised:focus,
+.layout-tv .detailButton:focus,
+.layout-tv button:focus,
+.layout-tv [role="button"]:focus,
+.layout-tv a:focus {
+    outline: 3px solid var(--accent-300) !important;
+    outline-offset: 3px !important;
+    background-color: rgba(var(--accent-rgb), 0.2) !important;
+    box-shadow:
+        0 0 0 5px rgba(var(--accent-rgb), 0.35),
+        0 0 20px rgba(var(--accent-rgb), 0.25) !important;
+}
+/* Primary action buttons — colored glow on focus */
+.layout-tv .button-submit:focus,
+.layout-tv .btnPlay:focus,
+.layout-tv .btnManual:focus {
+    background: linear-gradient(180deg, var(--accent-400), var(--accent-500)) !important;
+    outline: 3px solid var(--accent-300) !important;
+    outline-offset: 3px !important;
+    box-shadow:
+        0 0 0 5px rgba(var(--accent-rgb), 0.5),
+        0 6px 24px rgba(var(--accent-rgb), 0.5) !important;
+}
+/* Delete button on TV — red focus ring */
+.layout-tv .btnDelete:focus,
+.layout-tv .button-delete:focus {
+    outline-color: var(--btnDeleteBorderColor) !important;
+    box-shadow: 0 0 0 5px var(--btnDeleteGlow) !important;
+}
+/* Form inputs */
+.layout-tv .emby-input:focus,
+.layout-tv .emby-select:focus,
+.layout-tv .emby-textarea:focus {
+    border-color: var(--accent-300) !important;
+    background: rgba(255,255,255,0.12) !important;
+    outline: 3px solid var(--accent-300) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 5px rgba(var(--accent-rgb), 0.3) !important;
+}
+/* Tabs */
+.layout-tv .emby-tab-button:focus {
+    color: var(--accent-300) !important;
+    border-bottom: 2px solid var(--accent-300) !important;
+    background: rgba(var(--accent-rgb), 0.12) !important;
+    outline: 2px solid rgba(var(--accent-rgb), 0.5) !important;
+    outline-offset: -2px !important;
+}
+/* List / paper items */
+.layout-tv .listItem:focus,
+.layout-tv .listItem-border:focus,
+.layout-tv .paperList .emby-button:focus {
+    background: rgba(var(--accent-rgb), 0.22) !important;
+    outline: 2px solid var(--accent-300) !important;
+    outline-offset: -2px !important;
+    border-radius: var(--smallRadius) !important;
+}
+/* Active dialog */
+.layout-tv .dialog:focus-within {
+    border-color: var(--accent-300) !important;
+    box-shadow:
+        0 24px 64px rgba(0,0,0,0.7),
+        0 0 0 2px rgba(var(--accent-rgb), 0.4) !important;
+}
+/* Active section row */
+.layout-tv .emby-scroller:focus-within .sectionTitle {
+    color: var(--accent-300) !important;
+}
+
+/* ── TV Typography ──────────────────────────────────────────── */
+.layout-tv .sectionTitle             { font-size: 1.2em;  letter-spacing: -0.01em; }
+.layout-tv .cardText                 { font-size: 0.92em; }
+.layout-tv .cardTextLine2            { font-size: 0.82em; }
+.layout-tv .itemName,
+.layout-tv .detailPageTitle          { font-size: 1.8em;  letter-spacing: -0.02em; }
+.layout-tv h1                        { font-size: 2em; }
+.layout-tv .overviewText             { font-size: 1em;    line-height: 1.6; }
+.layout-tv .runningTime,
+.layout-tv .mediaInfoItem            { font-size: 0.9em; }
+
+/* ── TV: disable hover animations (D-pad ≠ pointer) ─────────── */
+.layout-tv .card-hoverable:hover .cardScalable {
+    transform: none !important;
+    border-color: rgba(255,255,255,0.1) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3) !important;
+}
+.layout-tv .card-hoverable:hover .cardImageContainer { transform: none !important; }
+.layout-tv .button-submit:hover,
+.layout-tv .btnPlay:hover {
+    transform: none !important;
+    background: linear-gradient(180deg, var(--accent-500), var(--accent-600)) !important;
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb),0.35), inset 0 1px 0 rgba(255,255,255,0.15) !important;
+}
+.layout-tv .detailButton:hover {
+    background:   rgba(255,255,255,0.08) !important;
+    border-color: rgba(255,255,255,0.14) !important;
+}
+
+/* ── TV Login ───────────────────────────────────────────────── */
+.layout-tv #loginPage .padded-left.padded-right.padded-top,
+.layout-tv #loginPage .loginFormFields,
+.layout-tv #loginPage .centerFocus,
+.layout-tv .loginPage-wrapper,
+.layout-tv .manualLoginForm {
+    max-width: 560px !important;
+    padding: 3em !important;
+}
+.layout-tv .btnManual { min-height: 60px; font-size: 1.1em; }
+
+/* ================================================================
+   @supports — BACKDROP-FILTER FALLBACK
+   Old TV browsers: WebOS ≤4, Tizen ≤5, Chromium < 76
+   ================================================================ */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .skinHeader,
+    .skinHeader-withBackground                        { background: rgba(var(--bg-rgb), 0.97) !important; }
+    .mainDrawer,
+    .drawer-open                                      { background: rgba(var(--bg-rgb), 0.97) !important; }
+    .visualCardBox                                    { background: rgba(var(--bg-rgb), 0.82) !important; }
+    .dialog                                           { background: rgba(var(--bg-rgb), 0.97) !important; }
+    .nowPlayingBar,
+    .appfooter                                        { background: rgba(var(--bg-rgb), 0.97) !important; }
+    .detailButton                                     { background: rgba(255,255,255,0.15) !important; }
+    #loginPage .padded-left.padded-right.padded-top,
+    #loginPage .loginFormFields,
+    #loginPage .centerFocus,
+    .loginPage-wrapper,
+    .manualLoginForm                                  { background: rgba(var(--bg-rgb), 0.92) !important; }
+}
+
+/* ================================================================
+   ACCESSIBILITY — prefers-reduced-motion
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration:        0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration:       0.01ms !important;
+        scroll-behavior:           auto !important;
+    }
+    .card                                               { animation: none !important; }
+    .card-hoverable:hover .cardScalable,
+    .layout-tv .card-hoverable:focus .cardScalable,
+    .layout-tv .card:focus .cardScalable,
+    .card-hoverable:hover .cardImageContainer,
+    .backgroundContainer.withBackdrop .backdropImage   { transform: none !important; }
+    .button-submit:hover, .btnPlay:hover,
+    .button-submit:active, .btnPlay:active             { transform: none !important; }
+}

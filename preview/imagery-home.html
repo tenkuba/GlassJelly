@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:0;background:#0a130f;height:240px;color:#fff;font:var(--body);position:relative;overflow:hidden}
+  .bg{position:absolute;inset:-20px;background:url("https://picsum.photos/seed/home/900/240") center/cover;filter:blur(50px) saturate(120%) brightness(.85);transform:scale(1.08)}
+  .overlay{position:absolute;inset:0;background:rgba(10,19,15,.5)}
+  .content{position:relative;padding:28px 32px;display:flex;gap:14px}
+  .card{width:140px;height:180px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 8px 24px rgba(0,0,0,.4);background-image:linear-gradient(180deg,rgba(47,122,77,.2),rgba(10,19,15,.5))}
+  .h{position:absolute;top:20px;left:32px;font:var(--label);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+</style></head><body>
+  <div class="bg"></div><div class="overlay"></div>
+  <div class="h">Home · blur 50px + 50% overlay</div>
+  <div class="content" style="padding-top:60px"><div class="card"></div><div class="card"></div><div class="card"></div><div class="card"></div><div class="card"></div></div>
+</body></html>

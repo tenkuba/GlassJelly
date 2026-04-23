@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:20px;background:url("https://picsum.photos/seed/kubi/900/260") center/cover no-repeat,#0a130f;color:#fff;font:var(--body);min-height:220px}
+  .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .card{padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.12);box-shadow:0 8px 24px rgba(0,0,0,.35);min-height:110px;display:flex;flex-direction:column;justify-content:flex-end}
+  .c1{background:rgba(120,170,140,.06);backdrop-filter:blur(8px) saturate(140%);-webkit-backdrop-filter:blur(8px) saturate(140%)}
+  .c2{background:rgba(120,170,140,.12);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
+  .c3{background:rgba(120,170,140,.22);backdrop-filter:blur(32px) saturate(180%);-webkit-backdrop-filter:blur(32px) saturate(180%)}
+  .c4{background:rgba(15,29,22,.78);backdrop-filter:blur(56px) saturate(180%);-webkit-backdrop-filter:blur(56px) saturate(180%)}
+  .lbl{font:var(--label);letter-spacing:var(--ls-uppercase);text-transform:uppercase;color:rgba(255,255,255,.65)}
+  .val{font:var(--h4);margin-top:2px}
+</style></head><body>
+  <div class="wrap">
+    <div class="card c1"><div class="lbl">weak</div><div class="val">blur 8px · α 0.06</div></div>
+    <div class="card c2"><div class="lbl">soft</div><div class="val">blur 18px · α 0.12</div></div>
+    <div class="card c3"><div class="lbl">strong</div><div class="val">blur 32px · α 0.22</div></div>
+    <div class="card c4"><div class="lbl">solid</div><div class="val">blur 56px · drawer</div></div>
+  </div>
+</body></html>

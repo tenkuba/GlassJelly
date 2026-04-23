@@ -1,0 +1,42 @@
+/* KubiMax Glass — BROWN (warm cognac) */
+@import url("./_base.css");
+
+:root {
+    --theme-name: "KubiMax Glass — Brown";
+    --elegantFinFooterText: "KubiMax Glass — Brown";
+
+    --accent-100: #e8cfb4;
+    --accent-300: #c79871;
+    --accent-400: #a57045;
+    --accent-500: #8a5a35;
+    --accent-600: #6e4628;
+    --accent-700: #52321b;
+    --accent-rgb: 138, 90, 53;
+
+    --accent-alt: #e0b97e;            /* warm sand */
+    --accent-alt-rgb: 224, 185, 126;
+
+    --bg-0: #120c07;
+    --bg-1: #1d140c;
+    --bg-2: #2a1e12;
+    --bg-rgb: 18, 12, 7;
+    --bg-gradient: radial-gradient(ellipse at 30% 0%, #3a2614 0%, #1d140c 55%, #0c0804 100%);
+
+    --darkerGradientPoint: var(--bg-0);
+    --lighterGradientPoint: var(--bg-2);
+    --darkerGradientPointAlpha: rgba(18,12,7,0.85);
+    --lighterGradientPointAlpha: rgba(42,30,18,0.6);
+    --headerColor: rgba(29,20,12,0.55);
+    --drawerColor: rgba(29,20,12,0.78);
+    --selectorBackgroundColor: rgba(138,90,53,0.35);
+    --activeColor: var(--accent-500);
+    --activeColorAlpha: rgba(138,90,53,0.9);
+    --uiAccentColor: var(--accent-500);
+    --btnMiniPlayColor: var(--accent-500);
+    --btnMiniPlayBorderColor: var(--accent-300);
+    --btnSubmitColor: var(--accent-600);
+    --btnSubmitBorderColor: var(--accent-300);
+    --checkboxCheckedBgColor: var(--accent-500);
+    --highlightOutlineColor: var(--accent-300);
+    --backgroundGradient: var(--bg-gradient);
+}

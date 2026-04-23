@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>KubiMax Glass · Jellyfin UI Kit</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+/* ------------ FONT ------------ */
+@font-face{font-family:"Montserrat";font-weight:400;font-display:swap;src:url("../../fonts/Montserrat-Regular.ttf") format("truetype")}
+@font-face{font-family:"Montserrat";font-weight:500;font-display:swap;src:url("../../fonts/Montserrat-Medium.ttf") format("truetype")}
+@font-face{font-family:"Montserrat";font-weight:600;font-display:swap;src:url("../../fonts/Montserrat-SemiBold.ttf") format("truetype")}
+@font-face{font-family:"Montserrat";font-weight:700;font-display:swap;src:url("../../fonts/Montserrat-Bold.ttf") format("truetype")}
+@font-face{font-family:"Montserrat";font-weight:800;font-display:swap;src:url("../../fonts/Montserrat-ExtraBold.ttf") format("truetype")}
+
+/* ------------ TOKENS (Deep Forest default; data-theme overrides) ------------ */
+:root {
+  --accent-100:#c7e4cf; --accent-300:#6faf84; --accent-400:#3a8e5b;
+  --accent-500:#2f7a4d; --accent-600:#24603c; --accent-700:#1a482d;
+  --accent-rgb:47,122,77;
+  --accent-alt:#d9a441; --accent-alt-rgb:217,164,65;
+  --bg-0:#0a130f; --bg-1:#0f1d16; --bg-2:#15281e; --bg-rgb:10,19,15;
+  --bg-gradient:radial-gradient(ellipse at 20% 0%,#1a3a2a 0%,#0a130f 55%,#06100a 100%);
+}
+[data-theme="marine"] {
+  --accent-100:#bfe0f5; --accent-300:#5aa5d6; --accent-400:#2e82bf;
+  --accent-500:#1a6aa8; --accent-600:#12548a; --accent-700:#0b3e6b;
+  --accent-rgb:26,106,168;
+  --accent-alt:#7dd3fc; --accent-alt-rgb:125,211,252;
+  --bg-0:#060e18; --bg-1:#0a1726; --bg-2:#0f2238; --bg-rgb:6,14,24;
+  --bg-gradient:radial-gradient(ellipse at 80% 0%,#102f4f 0%,#0a1726 55%,#040a12 100%);
+}
+[data-theme="brown"] {
+  --accent-100:#e8cfb4; --accent-300:#c79871; --accent-400:#a57045;
+  --accent-500:#8a5a35; --accent-600:#6e4628; --accent-700:#52321b;
+  --accent-rgb:138,90,53;
+  --accent-alt:#e0b97e; --accent-alt-rgb:224,185,126;
+  --bg-0:#120c07; --bg-1:#1d140c; --bg-2:#2a1e12; --bg-rgb:18,12,7;
+  --bg-gradient:radial-gradient(ellipse at 30% 0%,#3a2614 0%,#1d140c 55%,#0c0804 100%);
+}
+[data-theme="mono"] {
+  --accent-100:#e5e5e5; --accent-300:#a3a3a3; --accent-400:#737373;
+  --accent-500:#525252; --accent-600:#404040; --accent-700:#262626;
+  --accent-rgb:82,82,82;
+  --accent-alt:#fafafa; --accent-alt-rgb:250,250,250;
+  --bg-0:#0a0a0a; --bg-1:#111111; --bg-2:#1a1a1a; --bg-rgb:10,10,10;
+  --bg-gradient:radial-gradient(ellipse at 50% 0%,#1f1f1f 0%,#111111 55%,#050505 100%);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:"Montserrat",system-ui,sans-serif;color:#fff;
+  background:var(--bg-gradient),var(--bg-0);background-attachment:fixed;
+  min-height:100vh;overflow-x:hidden;
+  transition:background 400ms ease;
+}
+
+/* ------------ HEADER ------------ */
+.hdr{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;gap:20px;padding:14px 32px;
+  background:rgba(var(--bg-rgb),0.5);
+  backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  box-shadow:0 1px 0 rgba(255,255,255,.04),0 8px 24px rgba(0,0,0,.25);
+}
+.hdr .logo{height:28px}
+.hdr .logo img{height:100%;opacity:.9}
+.hdr .nav{display:flex;gap:4px;margin-left:12px}
+.hdr .nav a{
+  padding:8px 16px;border-radius:999px;color:rgba(255,255,255,.7);
+  font-weight:600;font-size:14px;text-decoration:none;transition:.2s;letter-spacing:.02em
+}
+.hdr .nav a:hover{color:#fff;background:rgba(255,255,255,.06)}
+.hdr .nav a.active{color:#fff;background:rgba(var(--accent-rgb),.25);border:1px solid rgba(var(--accent-rgb),.5)}
+.hdr .spacer{flex:1}
+.hdr .icon-btn{
+  width:40px;height:40px;border-radius:999px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);color:rgba(255,255,255,.85);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:.2s;padding:0
+}
+.hdr .icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hdr .icon-btn:hover{background:rgba(var(--accent-rgb),.25);border-color:var(--accent-300);color:var(--accent-100)}
+
+/* ------------ THEME PICKER ------------ */
+.theme-picker{display:flex;gap:6px;padding:4px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px}
+.theme-picker button{
+  border:none;background:transparent;color:rgba(255,255,255,.6);
+  padding:6px 14px;border-radius:999px;font-family:inherit;font-weight:600;font-size:12px;
+  letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:.2s
+}
+.theme-picker button.active{background:var(--accent-500);color:#fff;box-shadow:0 2px 8px rgba(var(--accent-rgb),.4)}
+
+/* ------------ HERO BACKDROP ------------ */
+.hero{
+  position:relative;min-height:620px;padding:140px 48px 120px;
+  overflow:visible;isolation:isolate;
+}
+.hero .bg{
+  position:absolute;top:-80px;left:-40px;right:-40px;height:900px;z-index:-1;
+  background-size:cover;background-position:center top;
+  transition:filter 600ms ease,opacity 600ms ease;
+  /* soft mask so the backdrop dissolves into the page on all sides */
+  -webkit-mask-image:radial-gradient(ellipse 110% 75% at 50% 28%,#000 0%,rgba(0,0,0,.85) 45%,rgba(0,0,0,.35) 75%,transparent 100%);
+          mask-image:radial-gradient(ellipse 110% 75% at 50% 28%,#000 0%,rgba(0,0,0,.85) 45%,rgba(0,0,0,.35) 75%,transparent 100%);
+}
+.hero.home .bg{filter:blur(70px) saturate(130%) brightness(.7);transform:scale(1.15);opacity:.75}
+.hero.detail .bg{filter:blur(2px) saturate(110%) brightness(.55);opacity:.9}
+.hero::after{
+  /* bottom dissolve into page bg */
+  content:"";position:absolute;left:0;right:0;bottom:-2px;height:260px;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,transparent 0%,rgba(var(--bg-rgb),.7) 55%,var(--bg-0) 100%);
+}
+.hero > .inner{position:relative;z-index:1;max-width:1400px;margin:0 auto}
+
+.hero h1{
+  font-size:clamp(42px,6vw,84px);font-weight:800;letter-spacing:-0.02em;
+  margin:0 0 12px;text-shadow:0 4px 24px rgba(0,0,0,.5)
+}
+.hero .meta{display:flex;gap:16px;color:rgba(255,255,255,.75);font-size:14px;letter-spacing:.04em;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.hero .meta .tag{padding:2px 10px;border:1px solid rgba(255,255,255,.3);border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.1em}
+.hero .meta .star{color:var(--accent-alt);font-weight:700}
+.hero .tagline{font-style:italic;font-weight:500;font-size:18px;color:rgba(255,255,255,.85);margin-bottom:18px;max-width:640px}
+.hero .plot{max-width:640px;color:rgba(255,255,255,.75);font-size:15px;line-height:1.55;margin-bottom:24px}
+.hero .ctas{display:flex;gap:10px;flex-wrap:wrap}
+
+/* ------------ BUTTONS ------------ */
+.btn{
+  padding:13px 28px;border-radius:999px;font-family:inherit;font-weight:600;font-size:14px;
+  letter-spacing:.03em;border:1px solid transparent;cursor:pointer;transition:all 150ms cubic-bezier(.22,1,.36,1);
+  display:inline-flex;align-items:center;gap:8px;text-transform:uppercase
+}
+.btn-primary{
+  background:linear-gradient(180deg,var(--accent-500),var(--accent-600));
+  color:#fff;border-color:var(--accent-300);
+  box-shadow:0 4px 12px rgba(var(--accent-rgb),.35),inset 0 1px 0 rgba(255,255,255,.15)
+}
+[data-theme="mono"] .btn-primary{
+  background:linear-gradient(180deg,#fafafa,#d4d4d4);color:#0a0a0a;border-color:#fff;
+  box-shadow:0 4px 12px rgba(255,255,255,.12),inset 0 1px 0 rgba(255,255,255,.5)
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(var(--accent-rgb),.5),0 0 32px rgba(var(--accent-rgb),.35)}
+.btn-primary:active{transform:translateY(0) scale(.98)}
+.btn-secondary{
+  background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.14);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)
+}
+.btn-secondary:hover{background:rgba(var(--accent-rgb),.4);border-color:var(--accent-300)}
+.btn-icon{width:48px;height:48px;padding:0;justify-content:center}
+.btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.btn-primary svg{stroke-width:2.2}
+.btn-primary svg.ico-play{fill:currentColor;stroke:none}
+
+/* ------------ CONTINUE / ROW SECTIONS ------------ */
+.section{padding:40px 48px;max-width:1480px;margin:0 auto}
+.section h2{
+  font-size:28px;font-weight:700;letter-spacing:-0.01em;margin:0 0 18px;
+  display:flex;align-items:baseline;gap:12px
+}
+.section h2 .count{color:rgba(255,255,255,.4);font-size:14px;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+
+.row{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 60px) / 6);gap:12px;overflow-x:auto;padding-bottom:8px;scroll-padding:0 48px;scrollbar-width:none;-ms-overflow-style:none}
+.row::-webkit-scrollbar{display:none;width:0;height:0}
+
+/* ------------ CARDS ------------ */
+.card{
+  position:relative;border-radius:14px;overflow:hidden;cursor:pointer;
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
+  transition:all 200ms cubic-bezier(.22,1,.36,1);
+  background:#0a0a0a;
+}
+.card .poster{aspect-ratio:2/3;background-size:cover;background-position:center;transition:transform .5s}
+.card.landscape .poster{aspect-ratio:16/9}
+.card:hover{border-color:var(--accent-300);transform:translateY(-3px);
+  box-shadow:0 0 0 1px rgba(var(--accent-rgb),.6),0 12px 32px rgba(0,0,0,.5),0 0 40px rgba(var(--accent-rgb),.25)
+}
+.card:hover .poster{transform:scale(1.04)}
+.card .fab{
+  position:absolute;left:12px;bottom:12px;width:40px;height:40px;border-radius:50%;
+  background:var(--accent-500);border:1px solid var(--accent-300);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(0,0,0,.4);opacity:0;transform:translateY(6px);transition:.2s
+}
+.card .fab svg{width:14px;height:14px;fill:currentColor}
+[data-theme="mono"] .card .fab{background:#fafafa;color:#0a0a0a;border-color:#fff}
+.card:hover .fab{opacity:1;transform:translateY(0)}
+.card .progress{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(0,0,0,.5)}
+.card .progress::after{content:"";display:block;height:100%;width:var(--p,35%);background:linear-gradient(90deg,var(--accent-500),var(--accent-alt))}
+.card .footer{
+  position:absolute;left:0;right:0;bottom:0;padding:48px 12px 10px;
+  background:linear-gradient(0deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.4) 60%,transparent);
+  font-size:13px;font-weight:600;text-shadow:0 2px 8px rgba(0,0,0,.6)
+}
+.card .footer .sub{font-size:11px;font-weight:500;color:rgba(255,255,255,.65);margin-top:2px}
+
+/* ------------ LIBRARY TILES ------------ */
+.libs{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.libs .lib{
+  aspect-ratio:16/9;border-radius:14px;overflow:hidden;position:relative;cursor:pointer;
+  border:1px solid rgba(255,255,255,.1);box-shadow:0 4px 16px rgba(0,0,0,.3);
+  background-size:cover;background-position:center;transition:.2s
+}
+.libs .lib:hover{border-color:var(--accent-300);transform:translateY(-2px)}
+.libs .lib::after{content:attr(data-label);position:absolute;left:14px;bottom:12px;
+  font-weight:700;font-size:15px;text-shadow:0 2px 8px rgba(0,0,0,.8)}
+.libs .lib::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.7),transparent 55%)}
+
+/* ------------ DETAIL PAGE ------------ */
+.detail-body{padding:40px 48px;max-width:1480px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:40px;align-items:start}
+.detail-body .poster-col img{width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.1);box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.detail-body h3{font-size:18px;font-weight:700;margin:0 0 12px;letter-spacing:.02em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.cast{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:14px;margin-bottom:32px}
+.cast .person{text-align:center;cursor:pointer}
+.cast .person .ph{width:100%;aspect-ratio:1;border-radius:50%;background:#222;background-size:cover;background-position:center;border:1px solid rgba(255,255,255,.1);margin-bottom:8px;transition:.2s}
+.cast .person:hover .ph{border-color:var(--accent-300);transform:scale(1.04)}
+.cast .person .n{font-size:13px;font-weight:600}
+.cast .person .r{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px}
+
+.pager{display:flex;gap:10px;padding:0 48px 60px;max-width:1480px;margin:0 auto}
+.pager .pill{
+  padding:10px 18px;border-radius:999px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);font-size:13px;font-weight:600;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer;transition:.2s;
+  color:#fff;font-family:inherit
+}
+.pager .pill.active{background:rgba(var(--accent-rgb),.3);border-color:var(--accent-300);color:#fff}
+.pager .pill:hover{background:rgba(var(--accent-rgb),.4);border-color:var(--accent-300)}
+
+/* ------------ NOW PLAYING BAR ------------ */
+.npb{
+  position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:40;
+  display:flex;align-items:center;gap:16px;padding:12px 20px;
+  background:rgba(var(--bg-rgb),.75);backdrop-filter:blur(48px) saturate(180%);-webkit-backdrop-filter:blur(48px) saturate(180%);
+  border:1px solid rgba(255,255,255,.12);border-radius:999px;
+  box-shadow:0 16px 48px rgba(0,0,0,.5);
+  min-width:420px;max-width:90vw
+}
+.npb .thumb{width:44px;height:44px;border-radius:10px;background-size:cover;background-position:center;flex-shrink:0}
+.npb .info{flex:1;min-width:0}
+.npb .info .t{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.npb .info .s{font-size:11px;color:rgba(255,255,255,.6);letter-spacing:.04em}
+.npb .controls{display:flex;gap:6px;align-items:center}
+.npb .play{width:40px;height:40px;border-radius:50%;background:var(--accent-500);border:1px solid var(--accent-300);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;padding:0}
+.npb .play svg{width:14px;height:14px;fill:currentColor}
+.npb .btn-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+[data-theme="mono"] .npb .play{background:#fafafa;color:#0a0a0a;border-color:#fff}
+.npb .play:hover{box-shadow:0 0 20px rgba(var(--accent-rgb),.6)}
+.npb .bar{position:absolute;left:20px;right:20px;bottom:6px;height:2px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden}
+.npb .bar::after{content:"";display:block;height:100%;width:37%;background:linear-gradient(90deg,var(--accent-500),var(--accent-alt))}
+
+/* view toggle */
+.view-toggle button{display:none}
+body[data-view="home"] #page-home{display:block}
+body[data-view="detail"] #page-detail{display:block}
+body[data-view="login"] #page-login{display:flex}
+body:not([data-view="home"]) #page-home{display:none}
+body:not([data-view="detail"]) #page-detail{display:none}
+body:not([data-view="login"]) #page-login{display:none}
+body[data-view="login"] .hdr,
+body[data-view="login"] .npb{display:none}
+
+/* ============ LOGIN ============ */
+#page-login{
+  min-height:100vh;flex-direction:column;align-items:center;justify-content:center;
+  padding:48px 24px;position:relative;isolation:isolate;
+}
+.login-bg{
+  position:fixed;inset:-80px;z-index:-2;
+  background:url('https://image.tmdb.org/t/p/original/nNmJRkg8wWnRmzQDe2FwKbPIsJV.jpg') center/cover no-repeat;
+  filter:blur(70px) saturate(130%) brightness(.55);transform:scale(1.1);opacity:.7;
+  transition:opacity 600ms ease;
+}
+.login-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 0%,rgba(var(--bg-rgb),.6) 60%,var(--bg-0) 100%)}
+.login-top{position:absolute;top:24px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 32px;z-index:2}
+.login-top .logo{height:28px;opacity:.9}
+.login-top .logo img{height:100%}
+.login-card{
+  width:100%;max-width:420px;
+  background:rgba(var(--bg-rgb),.55);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
+  border:1px solid rgba(255,255,255,.12);border-radius:24px;
+  box-shadow:0 24px 80px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);
+  padding:40px 36px;position:relative;
+}
+.login-card h1{font-size:28px;font-weight:700;letter-spacing:-0.01em;margin:0 0 6px;text-align:center}
+.login-card .sub{color:rgba(255,255,255,.6);font-size:13px;letter-spacing:.02em;text-align:center;margin-bottom:28px}
+
+.user-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.user-grid .u{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:8px 4px;border-radius:14px;transition:.2s;border:1px solid transparent}
+.user-grid .u:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08)}
+.user-grid .u.active{background:rgba(var(--accent-rgb),.18);border-color:var(--accent-400)}
+.user-grid .u .av{width:56px;height:56px;border-radius:50%;background-size:cover;background-position:center;border:2px solid rgba(255,255,255,.1);transition:.2s}
+.user-grid .u.active .av{border-color:var(--accent-300);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.35),0 0 20px rgba(var(--accent-rgb),.4)}
+.user-grid .u .av.add{background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4)}
+.user-grid .u .av.add svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
+.user-grid .u .n{font-size:11px;font-weight:600;color:rgba(255,255,255,.85);text-align:center;max-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.divider{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.35);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin:8px 0 18px}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.1)}
+
+.field{position:relative;margin-bottom:12px}
+.field label{position:absolute;left:16px;top:-7px;background:var(--bg-1);padding:0 6px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.field input{
+  width:100%;padding:14px 44px 14px 16px;border-radius:12px;
+  background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);
+  color:#fff;font-family:inherit;font-size:14px;outline:none;transition:.2s
+}
+.field input:focus{border-color:var(--accent-400);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.25)}
+.field .ico{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.45);cursor:pointer;display:flex;padding:4px}
+.field .ico svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.field .ico:hover{color:var(--accent-300)}
+
+.login-row{display:flex;align-items:center;justify-content:space-between;margin:8px 0 22px;font-size:12px}
+.check{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.7);cursor:pointer;user-select:none}
+.check input{appearance:none;width:16px;height:16px;border-radius:4px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.3);cursor:pointer;position:relative;transition:.15s}
+.check input:checked{background:var(--accent-500);border-color:var(--accent-300)}
+.check input:checked::after{content:"";position:absolute;left:4px;top:0;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.login-row a{color:var(--accent-300);text-decoration:none;font-weight:600}
+.login-row a:hover{color:var(--accent-100);text-decoration:underline}
+
+.btn-block{width:100%;justify-content:center;padding:15px}
+
+.qc{
+  margin-top:18px;padding:16px;border-radius:14px;
+  background:rgba(var(--accent-rgb),.08);border:1px dashed rgba(var(--accent-rgb),.35);
+  display:flex;gap:14px;align-items:center;cursor:pointer;transition:.2s
+}
+.qc:hover{background:rgba(var(--accent-rgb),.15);border-color:var(--accent-300)}
+.qc .qc-ico{width:40px;height:40px;border-radius:10px;background:rgba(var(--accent-rgb),.25);display:flex;align-items:center;justify-content:center;color:var(--accent-100);flex-shrink:0}
+.qc .qc-ico svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.qc .qc-t{font-size:13px;font-weight:700}
+.qc .qc-s{font-size:11px;color:rgba(255,255,255,.6);letter-spacing:.02em;margin-top:2px}
+
+.login-foot{margin-top:28px;text-align:center;font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.06em}
+.login-foot .server{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.55);padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+.login-foot .server .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-400);box-shadow:0 0 8px var(--accent-400)}
+
+/* responsive */
+@media (max-width:720px){
+  .login-card{padding:28px 22px}
+  .user-grid{grid-template-columns:repeat(4,1fr);gap:10px}
+}
+
+/* responsive */
+@media (max-width:1100px){
+  .row{grid-auto-columns:calc((100% - 36px) / 4)}
+  .libs{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:720px){
+  .hdr{padding:10px 16px;gap:10px}
+  .hdr .nav{display:none}
+  .hero{padding:100px 20px 40px;min-height:440px}
+  .section{padding:24px 20px}
+  .row{grid-auto-columns:calc((100% - 24px) / 3)}
+  .libs{grid-template-columns:repeat(2,1fr)}
+  .detail-body{grid-template-columns:1fr;padding:24px 20px}
+  .npb{min-width:0;left:8px;right:8px;transform:none;bottom:8px}
+}
+</style>
+</head>
+<body data-view="login" data-theme="forest">
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="logo"><img src="../../assets/banner-light.png" alt="KubiMax"></div>
+  <nav class="nav">
+    <a href="#" class="active" data-view="home">Home</a>
+    <a href="#" data-view="detail">Movies</a>
+    <a href="#">Shows</a>
+    <a href="#">Music</a>
+    <a href="#">Live TV</a>
+    <a href="#" data-view="login">Sign out</a>
+  </nav>
+  <div class="spacer"></div>
+  <div class="theme-picker" id="picker">
+    <button data-set="forest" class="active">Forest</button>
+    <button data-set="marine">Marine</button>
+    <button data-set="brown">Brown</button>
+    <button data-set="mono">Mono</button>
+  </div>
+  <button class="icon-btn" title="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+  <button class="icon-btn" title="Cast"><svg viewBox="0 0 24 24"><path d="M2 8V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"/><path d="M2 12a6 6 0 0 1 6 6"/><path d="M2 16a2 2 0 0 1 2 2"/><circle cx="3" cy="19" r="1" fill="currentColor"/></svg></button>
+  <button class="icon-btn" title="Profile"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></button>
+</header>
+
+<!-- =========== HOME =========== -->
+<div id="page-home">
+  <section class="hero home">
+    <div class="bg" style="background-image:url('https://image.tmdb.org/t/p/original/gb8S3zJKLHHzGy9wKOUljT2NHuU.jpg')"></div>
+    <div class="inner">
+      <h1>Dune: Part Two</h1>
+      <div class="meta">
+        <span class="tag">PG-13</span>
+        <span>2024</span><span>·</span>
+        <span>2h 46m</span><span>·</span>
+        <span class="star">★ 8.4</span><span>·</span>
+        <span>4K HDR · Atmos</span>
+      </div>
+      <p class="tagline">Long live the fighters.</p>
+      <p class="plot">Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.</p>
+      <div class="ctas">
+        <button class="btn btn-primary"><svg class="ico-play" viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg>Play</button>
+        <button class="btn btn-secondary"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Queue</button>
+        <button class="btn btn-secondary btn-icon" title="Favorite"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        <button class="btn btn-secondary btn-icon" title="Trailer"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9v6l5-3z" fill="currentColor" stroke="none"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>My Media <span class="count">5 libraries</span></h2>
+    <div class="libs">
+      <div class="lib" data-label="Movies" style="background-image:url('https://image.tmdb.org/t/p/w780/kXfqcdQKsToO0OUXHcrrNCHDBzO.jpg')"></div>
+      <div class="lib" data-label="TV Shows" style="background-image:url('https://image.tmdb.org/t/p/w780/jcnW9H2WRnFaMnDQPpaDfkWSZNh.jpg')"></div>
+      <div class="lib" data-label="Music" style="background-image:url('https://image.tmdb.org/t/p/w780/jv9PKT2srV8RfIysA3qeiNctLUI.jpg')"></div>
+      <div class="lib" data-label="Home Videos" style="background-image:url('https://image.tmdb.org/t/p/w780/jdK5VMrFHXOFoOQoDKMhvcY96Ji.jpg')"></div>
+      <div class="lib" data-label="Live TV" style="background-image:url('https://image.tmdb.org/t/p/w780/wNAhuOZ3Zf84jCIlrcI6JhgmY5q.jpg')"></div>
+      <div class="lib" data-label="Books" style="background-image:url('https://image.tmdb.org/t/p/w780/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg')"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Continue Watching <span class="count">6 items</span></h2>
+    <div class="row" id="continue-row"></div>
+  </section>
+
+  <section class="section">
+    <h2>Recently Added Movies</h2>
+    <div class="row" id="latest-row"></div>
+  </section>
+
+  <section class="section">
+    <h2>Next Up</h2>
+    <div class="row" id="nextup-row"></div>
+  </section>
+</div>
+
+<!-- =========== DETAIL =========== -->
+<div id="page-detail">
+  <section class="hero detail">
+    <div class="bg" style="background-image:url('https://image.tmdb.org/t/p/original/nNmJRkg8wWnRmzQDe2FwKbPIsJV.jpg')"></div>
+    <div class="inner">
+      <h1>Blade Runner 2049</h1>
+      <div class="meta">
+        <span class="tag">R</span>
+        <span>2017</span><span>·</span>
+        <span>2h 44m</span><span>·</span>
+        <span class="star">★ 8.0</span><span>·</span>
+        <span>4K HDR · 5.1</span><span>·</span>
+        <span>Sci-Fi, Drama, Mystery</span>
+      </div>
+      <p class="tagline">The key to the future is finally unearthed.</p>
+      <p class="plot">Young Blade Runner K's discovery of a long-buried secret leads him to track down former Blade Runner Rick Deckard, who's been missing for thirty years.</p>
+      <div class="ctas">
+        <button class="btn btn-primary"><svg class="ico-play" viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg>Resume 1:42:15</button>
+        <button class="btn btn-secondary">From Start</button>
+        <button class="btn btn-secondary">Trailer</button>
+        <button class="btn btn-secondary btn-icon" title="Favorite"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        <button class="btn btn-secondary btn-icon" title="Mark played"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></button>
+        <button class="btn btn-secondary btn-icon" title="More"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <div class="pager">
+    <button class="pill active">Overview</button>
+    <button class="pill">Cast & Crew</button>
+    <button class="pill">Extras · 4</button>
+    <button class="pill">Similar</button>
+  </div>
+
+  <section class="detail-body">
+    <div class="poster-col">
+      <img src="https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg" alt="Poster">
+    </div>
+    <div>
+      <h3>Cast</h3>
+      <div class="cast" id="cast-grid"></div>
+
+      <h3>Details</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px 32px;color:rgba(255,255,255,.8);font-size:14px;line-height:1.8">
+        <div><strong>Director:</strong> Denis Villeneuve</div>
+        <div><strong>Writer:</strong> Hampton Fancher, Michael Green</div>
+        <div><strong>Studio:</strong> Warner Bros.</div>
+        <div><strong>Released:</strong> October 6, 2017</div>
+        <div><strong>Runtime:</strong> 2h 44m</div>
+        <div><strong>Container:</strong> MKV · HEVC · DTS-HD MA 5.1</div>
+        <div><strong>Resolution:</strong> 3840 × 2160 (4K HDR10)</div>
+        <div><strong>Bitrate:</strong> 38.4 Mbps</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- =========== LOGIN =========== -->
+<div id="page-login">
+  <div class="login-bg"></div>
+  <div class="login-top">
+    <div class="logo"><img src="../../assets/banner-light.png" alt="KubiMax"></div>
+    <div class="theme-picker" id="picker-login">
+      <button data-set="forest" class="active">Forest</button>
+      <button data-set="marine">Marine</button>
+      <button data-set="brown">Brown</button>
+      <button data-set="mono">Mono</button>
+    </div>
+  </div>
+
+  <div class="login-card">
+    <h1>Welcome back</h1>
+    <div class="sub">Select a profile or sign in with credentials</div>
+
+    <div class="user-grid" id="user-grid">
+      <div class="u active" data-u="Kubi"><div class="av" style="background-image:url('https://i.pravatar.cc/120?img=12')"></div><div class="n">Kubi</div></div>
+      <div class="u" data-u="Anna"><div class="av" style="background-image:url('https://i.pravatar.cc/120?img=5')"></div><div class="n">Anna</div></div>
+      <div class="u" data-u="Marek"><div class="av" style="background-image:url('https://i.pravatar.cc/120?img=33')"></div><div class="n">Marek</div></div>
+      <div class="u" data-u="Guest"><div class="av" style="background-image:url('https://i.pravatar.cc/120?img=47')"></div><div class="n">Guest</div></div>
+      <div class="u" data-u="Zosia"><div class="av" style="background-image:url('https://i.pravatar.cc/120?img=20')"></div><div class="n">Zosia</div></div>
+      <div class="u" data-u="Tomek"><div class="av" style="background-image:url('https://i.pravatar.cc/120?img=15')"></div><div class="n">Tomek</div></div>
+      <div class="u" data-u="Kids"><div class="av" style="background-image:url('https://i.pravatar.cc/120?img=56')"></div><div class="n">Kids</div></div>
+      <div class="u" data-u="add"><div class="av add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div><div class="n" style="color:rgba(255,255,255,.5)">Add user</div></div>
+    </div>
+
+    <div class="divider">or sign in manually</div>
+
+    <div class="field">
+      <label>Username</label>
+      <input type="text" value="Kubi">
+      <span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" value="••••••••••••" id="pw">
+      <span class="ico" id="pw-toggle"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
+    </div>
+
+    <div class="login-row">
+      <label class="check"><input type="checkbox" checked> Remember me</label>
+      <a href="#">Forgot password?</a>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="do-login">Sign in</button>
+
+    <div class="qc" title="Quick Connect">
+      <div class="qc-ico"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M14 14h2M20 14v2M14 20h6M18 16v4"/></svg></div>
+      <div>
+        <div class="qc-t">Quick Connect</div>
+        <div class="qc-s">Enter a 6-digit code from another device</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-foot">
+    <span class="server"><span class="dot"></span> Connected to <strong style="color:rgba(255,255,255,.8);margin-left:4px">kubimax.home.arpa</strong> · v10.9.11</span>
+  </div>
+</div>
+
+<!-- NOW PLAYING -->
+<div class="npb">
+  <div class="thumb" style="background-image:url('https://image.tmdb.org/t/p/w200/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg')"></div>
+  <div class="info">
+    <div class="t">Blade Runner 2049</div>
+    <div class="s">1:42:15 / 2:44:00</div>
+  </div>
+  <div class="controls">
+    <button class="btn btn-secondary btn-icon" title="Previous"><svg viewBox="0 0 24 24"><path d="M6 5v14M19 5l-10 7 10 7z" fill="currentColor" stroke="none"/></svg></button>
+    <button class="play" title="Pause"><svg viewBox="0 0 24 24"><path d="M7 4h4v16H7zM13 4h4v16h-4z"/></svg></button>
+    <button class="btn btn-secondary btn-icon" title="Next"><svg viewBox="0 0 24 24"><path d="M18 5v14M5 5l10 7-10 7z" fill="currentColor" stroke="none"/></svg></button>
+  </div>
+  <div class="bar"></div>
+</div>
+
+<script>
+/* ---- theme switcher (both pickers) ---- */
+function wirePicker(el){
+  el.addEventListener("click", e => {
+    const b = e.target.closest("button[data-set]"); if(!b) return;
+    applyTheme(b.dataset.set);
+  });
+}
+function applyTheme(t){
+  document.body.setAttribute("data-theme", t);
+  document.querySelectorAll(".theme-picker button").forEach(x=>x.classList.toggle("active", x.dataset.set===t));
+  localStorage.setItem("kubimax_theme", t);
+}
+wirePicker(document.getElementById("picker"));
+wirePicker(document.getElementById("picker-login"));
+const saved = localStorage.getItem("kubimax_theme");
+if(saved) applyTheme(saved);
+
+/* ---- view switcher ---- */
+document.querySelectorAll(".nav a[data-view]").forEach(a=>{
+  a.addEventListener("click",e=>{
+    e.preventDefault();
+    document.body.setAttribute("data-view", a.dataset.view);
+    document.querySelectorAll(".nav a").forEach(x=>x.classList.toggle("active", x===a));
+    window.scrollTo({top:0,behavior:"smooth"});
+    localStorage.setItem("kubimax_view", a.dataset.view);
+  });
+});
+const savedView = localStorage.getItem("kubimax_view");
+if(savedView){
+  document.body.setAttribute("data-view", savedView);
+  document.querySelectorAll(".nav a").forEach(x=>x.classList.toggle("active", x.dataset.view===savedView));
+}
+
+/* ---- seed cards ---- */
+const posters = [
+  {t:"Oppenheimer", y:"2023", p:"/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", pr:72},
+  {t:"Everything Everywhere All at Once", y:"2022", p:"/w3LxiVYdWWRvEVdn5RBuoxP9XTd.jpg", pr:12},
+  {t:"The Batman", y:"2022", p:"/b0PlSFdDwbyK0cf5RxwDpaOJQvQ.jpg", pr:55},
+  {t:"Parasite", y:"2019", p:"/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg", pr:88},
+  {t:"Arrival", y:"2016", p:"/hLudzvGfpi6JlwUnsNhXwKKg4j.jpg", pr:22},
+  {t:"Mad Max: Fury Road", y:"2015", p:"/8tZYtuWezp8JbcsvHYO0O46tFbo.jpg", pr:95},
+  {t:"Interstellar", y:"2014", p:"/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg", pr:40},
+  {t:"Dune", y:"2021", p:"/d5NXSklXo0qyIYkgV94XAgMIckC.jpg", pr:67},
+  {t:"The Grand Budapest Hotel", y:"2014", p:"/eWdyYQreja6JGCzqHWXpWHDrrPo.jpg", pr:18},
+  {t:"Whiplash", y:"2014", p:"/oPxnRhyAIzJKGUEdSpYSPvYOzTg.jpg", pr:83},
+  {t:"Her", y:"2013", p:"/yy1oGOqpcztrHGGPGwqQnfKKY1F.jpg", pr:5},
+  {t:"Sicario", y:"2015", p:"/ob1pWmG9hh7Tl7TpgHvpFjOGL5h.jpg", pr:50}
+];
+function card({t,y,p,pr}, landscape=false){
+  const src = (landscape ? "https://image.tmdb.org/t/p/w500" : "https://image.tmdb.org/t/p/w342") + p;
+  return `<div class="card ${landscape?'landscape':''}" data-t="${t}">
+    <div class="poster" style="background-image:url('${src}')"></div>
+    <div class="fab"><svg viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg></div>
+    ${pr ? `<div class="progress" style="--p:${pr}%"></div>`:""}
+    <div class="footer"><div>${t}</div><div class="sub">${y}</div></div>
+  </div>`;
+}
+document.getElementById("continue-row").innerHTML = posters.slice(0,8).map(x=>card(x,true)).join("");
+document.getElementById("latest-row").innerHTML = posters.slice(2,12).map(x=>card({...x,pr:0})).join("");
+document.getElementById("nextup-row").innerHTML = posters.slice(4,10).map(x=>card(x,true)).join("");
+
+/* ---- cast ---- */
+const cast = [
+  {n:"Ryan Gosling",r:"Officer K",p:"https://image.tmdb.org/t/p/w185/asTzTWrFc3IA39Pi4qi6MlIm5bo.jpg"},
+  {n:"Harrison Ford",r:"Rick Deckard",p:"https://image.tmdb.org/t/p/w185/zVnHagUvXkR2StdOtquEwsiwSVt.jpg"},
+  {n:"Ana de Armas",r:"Joi",p:"https://image.tmdb.org/t/p/w185/9WMibGIiKU3qW2chv5uWy8kP2Q8.jpg"},
+  {n:"Sylvia Hoeks",r:"Luv",p:"https://image.tmdb.org/t/p/w185/p8Z1OwiuTMKLvQzj5PjwX8kSLsQ.jpg"},
+  {n:"Robin Wright",r:"Lt. Joshi",p:"https://image.tmdb.org/t/p/w185/fVjRjfh3p0MyGH5THc7I6DQQJ5y.jpg"},
+  {n:"Jared Leto",r:"Niander Wallace",p:"https://image.tmdb.org/t/p/w185/dSbx2GYH9LJdaFjoP75xpIMxDnC.jpg"},
+  {n:"Dave Bautista",r:"Sapper Morton",p:"https://image.tmdb.org/t/p/w185/sucNDwrEpatkmK9UjoZy7gFcPZy.jpg"}
+];
+document.getElementById("cast-grid").innerHTML = cast.map(c=>`
+  <div class="person"><div class="ph" style="background-image:url('${c.p}')"></div><div class="n">${c.n}</div><div class="r">${c.r}</div></div>
+`).join("");
+
+/* any card → detail view */
+document.addEventListener("click",e=>{
+  const c = e.target.closest(".card"); if(!c) return;
+  document.body.setAttribute("data-view","detail");
+  document.querySelectorAll(".nav a").forEach(x=>x.classList.toggle("active", x.dataset.view==="detail"));
+  window.scrollTo({top:0,behavior:"smooth"});
+  localStorage.setItem("kubimax_view","detail");
+});
+/* ---- login page interactions ---- */
+document.getElementById("user-grid").addEventListener("click", e=>{
+  const u = e.target.closest(".u"); if(!u) return;
+  document.querySelectorAll("#user-grid .u").forEach(x=>x.classList.toggle("active", x===u));
+  const name = u.dataset.u;
+  if(name && name!=="add") document.querySelector("#page-login input[type=text]").value = name;
+});
+document.getElementById("pw-toggle").addEventListener("click", ()=>{
+  const i = document.getElementById("pw");
+  i.type = i.type==="password" ? "text" : "password";
+});
+document.getElementById("do-login").addEventListener("click", ()=>{
+  document.body.setAttribute("data-view","home");
+  document.querySelectorAll(".nav a").forEach(x=>x.classList.toggle("active", x.dataset.view==="home"));
+  localStorage.setItem("kubimax_view","home");
+  window.scrollTo({top:0});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+/* KubiMax Glass — DEEP FOREST
+   Import this file in Jellyfin's Custom CSS box. It pulls the shared
+   base automatically. */
+@import url("./_base.css");
+
+:root {
+    --theme-name: "KubiMax Glass — Deep Forest";
+    --elegantFinFooterText: "KubiMax Glass — Deep Forest";
+
+    /* Accent scale — deep pine green */
+    --accent-100: #c7e4cf;
+    --accent-300: #6faf84;
+    --accent-400: #3a8e5b;
+    --accent-500: #2f7a4d;
+    --accent-600: #24603c;
+    --accent-700: #1a482d;
+    --accent-rgb: 47, 122, 77;
+
+    /* Complementary amber for ratings/badges */
+    --accent-alt: #d9a441;
+    --accent-alt-rgb: 217, 164, 65;
+
+    /* Canvas */
+    --bg-0: #0a130f;
+    --bg-1: #0f1d16;
+    --bg-2: #15281e;
+    --bg-rgb: 10, 19, 15;
+    --bg-gradient: radial-gradient(ellipse at 20% 0%, #1a3a2a 0%, #0a130f 55%, #06100a 100%);
+
+    /* Jellyfin bridge */
+    --darkerGradientPoint: var(--bg-0);
+    --lighterGradientPoint: var(--bg-2);
+    --darkerGradientPointAlpha: rgba(10,19,15,0.85);
+    --lighterGradientPointAlpha: rgba(21,40,30,0.6);
+    --headerColor: rgba(15,29,22,0.55);
+    --drawerColor: rgba(15,29,22,0.78);
+    --selectorBackgroundColor: rgba(47,122,77,0.35);
+    --activeColor: var(--accent-500);
+    --activeColorAlpha: rgba(47,122,77,0.9);
+    --uiAccentColor: var(--accent-500);
+    --btnMiniPlayColor: var(--accent-500);
+    --btnMiniPlayBorderColor: var(--accent-300);
+    --btnSubmitColor: var(--accent-600);
+    --btnSubmitBorderColor: var(--accent-300);
+    --checkboxCheckedBgColor: var(--accent-500);
+    --highlightOutlineColor: var(--accent-300);
+    --backgroundGradient: var(--bg-gradient);
+}

@@ -1,0 +1,197 @@
+/* KubiMax Glass — Type + Color Foundations
+   Used by preview HTML files (NOT imported by Jellyfin themes).
+   Variable names are kept in sync with themes/_base.css so preview
+   cards render consistently with the real Jellyfin output.
+
+   Differences from _base.css:
+   - Includes self-contained demo accent/bg tokens (Deep Forest)
+   - Adds glass-math helpers (--glass-*) not needed in Jellyfin
+   - Adds semantic font shorthand tokens for preview typography
+   ----------------------------------------------------------------- */
+
+/* ---------- FONT FACES (Montserrat, self-hosted) ---------- */
+@font-face {
+    font-family: "Montserrat"; font-style: normal; font-weight: 300; font-display: swap;
+    src: url("./fonts/Montserrat-Light.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Montserrat"; font-style: normal; font-weight: 400; font-display: swap;
+    src: url("./fonts/Montserrat-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Montserrat"; font-style: italic; font-weight: 400; font-display: swap;
+    src: url("./fonts/Montserrat-Italic.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Montserrat"; font-style: normal; font-weight: 500; font-display: swap;
+    src: url("./fonts/Montserrat-Medium.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Montserrat"; font-style: normal; font-weight: 600; font-display: swap;
+    src: url("./fonts/Montserrat-SemiBold.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Montserrat"; font-style: normal; font-weight: 700; font-display: swap;
+    src: url("./fonts/Montserrat-Bold.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Montserrat"; font-style: normal; font-weight: 800; font-display: swap;
+    src: url("./fonts/Montserrat-ExtraBold.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Montserrat"; font-style: normal; font-weight: 900; font-display: swap;
+    src: url("./fonts/Montserrat-Black.ttf") format("truetype");
+}
+
+:root {
+    /* ── Font families ─────────────────────────────────────────── */
+    --font-sans:    "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-display: "Montserrat", system-ui, sans-serif;
+
+    /* ── Font weights ──────────────────────────────────────────── */
+    --fw-thin:      300;
+    --fw-regular:   400;
+    --fw-medium:    500;
+    --fw-semibold:  600;
+    --fw-bold:      700;
+    --fw-extrabold: 800;
+    --fw-black:     900;
+
+    /* ── Font sizes (rem scale) ────────────────────────────────── */
+    --fs-xs:   0.75rem;
+    --fs-sm:   0.875rem;
+    --fs-base: 1rem;
+    --fs-md:   1.125rem;
+    --fs-lg:   1.375rem;
+    --fs-xl:   1.75rem;
+    --fs-2xl:  2.25rem;
+    --fs-3xl:  3rem;
+    --fs-hero: 4.5rem;
+
+    /* ── Line heights ──────────────────────────────────────────── */
+    --lh-tight:  1.15;
+    --lh-snug:   1.3;
+    --lh-normal: 1.5;
+
+    /* ── Letter spacings ───────────────────────────────────────── */
+    --ls-tight:    -0.02em;
+    --ls-normal:   0;
+    --ls-wide:     0.04em;
+    --ls-uppercase: 0.08em;
+
+    /* ── Semantic type shorthands (CSS font shorthand) ─────────── */
+    --h1:      var(--fw-extrabold) var(--fs-3xl) / var(--lh-tight) var(--font-display);
+    --h2:      var(--fw-bold)      var(--fs-2xl) / var(--lh-tight) var(--font-display);
+    --h3:      var(--fw-semibold)  var(--fs-xl)  / var(--lh-snug)  var(--font-sans);
+    --h4:      var(--fw-semibold)  var(--fs-lg)  / var(--lh-snug)  var(--font-sans);
+    --body:    var(--fw-regular)   var(--fs-base) / var(--lh-normal) var(--font-sans);
+    --body-sm: var(--fw-regular)   var(--fs-sm)  / var(--lh-normal) var(--font-sans);
+    --label:   var(--fw-semibold)  var(--fs-xs)  / var(--lh-snug)  var(--font-sans);
+    --button:  var(--fw-semibold)  var(--fs-sm)  / 1 var(--font-sans);
+
+    /* ── Neutral foreground (matches _base.css) ────────────────── */
+    --textColor:    rgba(255, 255, 255, 0.96);   /* --fg-1 */
+    --dimTextColor: rgba(255, 255, 255, 0.72);   /* --fg-2 */
+    --fg-1:         rgba(255, 255, 255, 0.96);
+    --fg-2:         rgba(255, 255, 255, 0.72);
+    --fg-3:         rgba(255, 255, 255, 0.48);
+    --fg-disabled:  rgba(255, 255, 255, 0.28);
+
+    /* ── Semantic status (matches _base.css) ───────────────────── */
+    --color-success: #4ade80;
+    --color-warning: #fbbf24;
+    --color-danger:  #f87171;
+    --color-info:    #60a5fa;
+
+    /* ── Demo accent — Deep Forest (overridden per theme in Jellyfin) */
+    --accent-100: #c7e4cf;
+    --accent-300: #6faf84;
+    --accent-400: #3a8e5b;
+    --accent-500: #2f7a4d;
+    --accent-600: #24603c;
+    --accent-700: #1a482d;
+    --accent-rgb: 47, 122, 77;
+    --accent-alt: #d9a441;
+    --accent-alt-rgb: 217, 164, 65;
+
+    /* ── Demo canvas — Deep Forest ─────────────────────────────── */
+    --bg-0:   #0a130f;
+    --bg-1:   #0f1d16;
+    --bg-2:   #15281e;
+    --bg-rgb: 10, 19, 15;
+    --bg-gradient: radial-gradient(ellipse at 20% 0%, #1a3a2a 0%, #0a130f 55%, #06100a 100%);
+
+    /* ── Radii — px (matches _base.css --r-* aliases) ─────────── */
+    --r-xs:   6px;
+    --r-sm:   10px;
+    --r-md:   14px;
+    --r-lg:   20px;
+    --r-xl:   28px;
+    --r-pill: 999px;
+    /* em aliases used in Jellyfin rules */
+    --largerRadius:  1.4em;
+    --largeRadius:   1.1em;
+    --smallRadius:   0.65em;
+    --smallerRadius: 0.4em;
+
+    /* ── Borders (matches _base.css) ───────────────────────────── */
+    --borderColor:        rgba(255,255,255,0.14);
+    --darkerBorderColor:  rgba(255,255,255,0.08);
+    --lighterBorderColor: rgba(255,255,255,0.22);
+    --defaultBorder:        1px solid var(--borderColor);
+    --defaultLighterBorder: 1px solid var(--lighterBorderColor);
+
+    /* ── Glass surface math ────────────────────────────────────── */
+    --tint-rgb: 255, 255, 255;
+    --glass-alpha-weak:   0.06;
+    --glass-alpha-soft:   0.12;
+    --glass-alpha-strong: 0.22;
+    --glass-alpha-solid:  0.38;
+
+    --glass-weak:   rgba(var(--tint-rgb), var(--glass-alpha-weak));
+    --glass-soft:   rgba(var(--tint-rgb), var(--glass-alpha-soft));
+    --glass-strong: rgba(var(--tint-rgb), var(--glass-alpha-strong));
+    --glass-solid:  rgba(var(--tint-rgb), var(--glass-alpha-solid));
+
+    /* ── Shadows (matches _base.css) ───────────────────────────── */
+    --shadow:   0 8px 24px rgba(0,0,0,0.4);
+    --shadow-1: 0 2px 8px rgba(0,0,0,0.18);
+    --shadow-2: 0 8px 24px rgba(0,0,0,0.32);
+    --shadow-3: 0 16px 48px rgba(0,0,0,0.48);
+    --shadow-glow: 0 0 32px rgba(var(--accent-rgb), 0.35);
+
+    /* ── Blurs (matches _base.css names) ───────────────────────── */
+    --blurSmallest: blur(6px) saturate(140%);
+    --blurDefault:  blur(14px) saturate(160%);
+    --blurLarge:    blur(26px) saturate(180%);
+    --blurLargest:  blur(48px) saturate(180%);
+    /* Preview shorthand aliases */
+    --blur-sm: var(--blurSmallest);
+    --blur-md: var(--blurDefault);
+    --blur-lg: var(--blurLarge);
+    --blur-xl: var(--blurLargest);
+
+    /* ── Motion (matches _base.css) ────────────────────────────── */
+    --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --dur-fast:  120ms;
+    --dur-base:  200ms;
+    --dur-slow:  360ms;
+
+    /* ── Spacing (8pt grid) ────────────────────────────────────── */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
+
+    /* ── Interaction ───────────────────────────────────────────── */
+    --touch-min:     44px;
+    --tv-font-scale: 1.15;
+
+    /* ── Base font ─────────────────────────────────────────────── */
+    font-family: var(--font-sans);
+}
