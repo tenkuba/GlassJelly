@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="" data-page="home">
+<head>
+<meta charset="utf-8">
+<title>KubiMax Glass — UI Preview</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+@font-face {
+  font-family: "Material Symbols Rounded";
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: block;
+  src: url("fonts/materialsymbolsrounded.woff2") format("woff2");
+}
+@font-face{font-family:"Montserrat";font-weight:300;src:url("../fonts/Montserrat-Light.ttf") format("truetype")}
+@font-face{font-family:"Montserrat";font-weight:400;src:url("../fonts/Montserrat-Regular.ttf") format("truetype")}
+@font-face{font-family:"Montserrat";font-weight:500;src:url("../fonts/Montserrat-Medium.ttf") format("truetype")}
+@font-face{font-family:"Montserrat";font-weight:600;src:url("../fonts/Montserrat-SemiBold.ttf") format("truetype")}
+@font-face{font-family:"Montserrat";font-weight:700;src:url("../fonts/Montserrat-Bold.ttf") format("truetype")}
+@font-face{font-family:"Montserrat";font-weight:800;src:url("../fonts/Montserrat-ExtraBold.ttf") format("truetype")}
+
+/* ── TOKENS ── */
+:root {
+  --accent-100:#c7e4cf;--accent-300:#6faf84;--accent-400:#3a8e5b;
+  --accent-500:#2f7a4d;--accent-600:#24603c;--accent-rgb:47,122,77;
+  --bg-0:#0a130f;--bg-1:#0f1d16;--bg-rgb:10,19,15;
+  --bg-gradient:radial-gradient(ellipse at 20% 0%,#1a3a2a 0%,#0a130f 55%,#06100a 100%);
+  --r-sm:10px;--r-md:14px;--r-lg:20px;--r-pill:999px;
+  --dur-fast:120ms;--dur-base:200ms;--dur-slow:360ms;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+}
+[data-theme="marine"]{
+  --accent-100:#bfe0f5;--accent-300:#5aa5d6;--accent-400:#2e82bf;
+  --accent-500:#1a6aa8;--accent-600:#12548a;--accent-rgb:26,106,168;
+  --bg-0:#060e18;--bg-rgb:6,14,24;
+  --bg-gradient:radial-gradient(ellipse at 80% 0%,#102f4f 0%,#0a1726 55%,#040a12 100%);
+}
+[data-theme="brown"]{
+  --accent-100:#e8cfb4;--accent-300:#c79871;--accent-400:#a57045;
+  --accent-500:#8a5a35;--accent-600:#6e4628;--accent-rgb:138,90,53;
+  --bg-0:#120c07;--bg-rgb:18,12,7;
+  --bg-gradient:radial-gradient(ellipse at 30% 0%,#3a2614 0%,#1d140c 55%,#0c0804 100%);
+}
+[data-theme="mono"]{
+  --accent-100:#e5e5e5;--accent-300:#a3a3a3;--accent-400:#737373;
+  --accent-500:#525252;--accent-600:#404040;--accent-rgb:82,82,82;
+  --bg-0:#0a0a0a;--bg-rgb:10,10,10;
+  --bg-gradient:radial-gradient(ellipse at 50% 0%,#1f1f1f 0%,#111 55%,#050505 100%);
+}
+
+/* ── RESET ── */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:"Montserrat",system-ui,sans-serif;color:#fff;
+  background:var(--bg-gradient) fixed,var(--bg-0);
+  transition:background 500ms;display:flex;flex-direction:column;
+}
+
+/* ── MATERIAL SYMBOLS ── */
+.mi{
+  font-family:"Material Symbols Rounded";
+  font-style:normal;font-weight:normal;line-height:1;
+  letter-spacing:normal;text-transform:none;white-space:nowrap;
+  word-wrap:normal;direction:ltr;
+  -webkit-font-feature-settings:"liga";font-feature-settings:"liga";
+  -webkit-font-smoothing:antialiased;
+  font-variation-settings:"FILL" 0,"wght" 300,"GRAD" -25,"opsz" 24;
+  color:rgba(255,255,255,.62);
+  transition:color var(--dur-fast),font-variation-settings var(--dur-fast);
+  user-select:none;display:inline-block;vertical-align:middle;
+}
+.mi.filled{font-variation-settings:"FILL" 1,"wght" 400,"GRAD" 0,"opsz" 24;color:rgba(255,255,255,.93)}
+.mi.active{font-variation-settings:"FILL" 1,"wght" 500,"GRAD" 25,"opsz" 24;color:var(--accent-300)}
+.mi.dim{font-variation-settings:"FILL" 0,"wght" 250,"GRAD" -25,"opsz" 24;color:rgba(255,255,255,.55)}
+.mi.hdr{font-variation-settings:"FILL" 0,"wght" 250,"GRAD" -25,"opsz" 24;color:rgba(255,255,255,.70)}
+
+/* ── TOOLBAR ── */
+.toolbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  padding:8px 16px;background:rgba(0,0,0,.5);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  flex-shrink:0;backdrop-filter:blur(20px);z-index:200;
+}
+.toolbar .lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 4px;}
+.tb-btn{
+  padding:5px 12px;border-radius:var(--r-pill);border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.05);color:rgba(255,255,255,.75);
+  font-family:inherit;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  cursor:pointer;transition:all var(--dur-base) var(--ease-out);
+}
+.tb-btn:hover{background:rgba(255,255,255,.10);color:#fff}
+.tb-btn.on{background:rgba(var(--accent-rgb),.25);border-color:var(--accent-300);color:var(--accent-100)}
+
+/* ── APP SHELL ── */
+.shell{display:flex;flex:1;overflow:hidden;position:relative;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:220px;flex-shrink:0;display:flex;flex-direction:column;
+  background:rgba(var(--bg-rgb),.80);backdrop-filter:blur(48px) saturate(180%);
+  border-right:1px solid rgba(255,255,255,.08);padding:20px 0;gap:2px;
+  transition:width var(--dur-slow) var(--ease-out);overflow:hidden;
+}
+.sidebar .sb-logo{
+  padding:0 16px 16px;display:flex;align-items:center;gap:10px;
+  font-weight:800;font-size:14px;color:rgba(255,255,255,.9);flex-shrink:0;white-space:nowrap;
+}
+.sidebar .sb-logo .mi{color:var(--accent-300);font-variation-settings:"FILL" 1,"wght" 500,"GRAD" 25,"opsz" 24;font-size:1.4em}
+.sb-section{padding:6px 16px 3px;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);white-space:nowrap;}
+.sb-divider{height:1px;background:rgba(255,255,255,.07);margin:6px 14px;}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:0 14px 0 10px;height:40px;white-space:nowrap;
+  border-left:3px solid transparent;
+  border-radius:0 var(--r-sm) var(--r-sm) 0;margin:1px 10px 1px 0;
+  font-size:12px;font-weight:600;color:rgba(255,255,255,.55);
+  cursor:pointer;transition:all var(--dur-base) var(--ease-out);
+}
+.nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9);border-left-color:rgba(var(--accent-rgb),.35);}
+.nav-item:hover .mi{color:rgba(255,255,255,.9);font-variation-settings:"FILL" 1,"wght" 400,"GRAD" 0,"opsz" 24}
+.nav-item.active{background:rgba(var(--accent-rgb),.20);border-left-color:var(--accent-300);color:var(--accent-100);transform:translateX(3px);}
+.nav-item.active .mi{color:var(--accent-300);font-variation-settings:"FILL" 1,"wght" 500,"GRAD" 25,"opsz" 24}
+.nav-item .mi{font-size:1.2em;flex-shrink:0;}
+
+/* ── MAIN COLUMN ── */
+.main-col{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:relative;display:flex;align-items:center;gap:10px;
+  padding:0 20px;height:56px;flex-shrink:0;
+  background:rgba(var(--bg-rgb),.50);
+  backdrop-filter:blur(26px) saturate(180%);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  box-shadow:0 1px 0 rgba(255,255,255,.03),0 6px 24px rgba(0,0,0,.25);
+}
+.topbar::after{
+  content:"";position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 0%,rgba(var(--accent-rgb),.45) 25%,rgba(var(--accent-rgb),.65) 50%,rgba(var(--accent-rgb),.45) 75%,transparent 100%);
+  pointer-events:none;
+}
+.topbar .spacer{flex:1}
+.topbar .back-btn{
+  display:none;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  font-size:12px;font-weight:600;color:rgba(255,255,255,.8);cursor:pointer;
+  transition:all var(--dur-base) var(--ease-out);
+}
+.topbar .back-btn:hover{background:rgba(255,255,255,.12);color:#fff}
+.topbar .back-btn .mi{font-size:16px;color:rgba(255,255,255,.7)}
+.topbar .breadcrumb{font-size:12px;color:rgba(255,255,255,.45);letter-spacing:.03em;}
+.topbar .breadcrumb span{color:rgba(255,255,255,.88);font-weight:600;}
+.icon-btn{
+  width:34px;height:34px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:all var(--dur-base) var(--ease-out);
+}
+.icon-btn:hover{background:rgba(var(--accent-rgb),.22);border-color:var(--accent-300);}
+.icon-btn:hover .mi{color:var(--accent-300);font-variation-settings:"FILL" 1,"wght" 400,"GRAD" 0,"opsz" 24}
+
+/* ── CONTENT AREA ── */
+.content{flex:1;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;}
+.content::-webkit-scrollbar{width:6px}
+.content::-webkit-scrollbar-track{background:transparent}
+.content::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:99px}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100%;}
+[data-page="home"]    #pg-home   {display:block}
+[data-page="detail"]  #pg-detail {display:block}
+[data-page="library"] #pg-library{display:block}
+[data-page="icons"]   #pg-icons  {display:block}
+
+/* ───────── HOME PAGE ───────── */
+#pg-home .hero{
+  position:relative;padding:80px 28px 48px;isolation:isolate;overflow:hidden;min-height:400px;
+}
+#pg-home .hero .bg{
+  position:absolute;inset:-20px;z-index:-1;
+  background:url('https://picsum.photos/seed/hero1/1400/600') center/cover;
+  filter:blur(60px) saturate(130%) brightness(.55);transform:scale(1.1);
+}
+#pg-home .hero::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:280px;z-index:0;
+  background:linear-gradient(0deg,var(--bg-0) 0%,rgba(var(--bg-rgb),.7) 50%,transparent 100%);
+}
+#pg-home .hero > .inner{position:relative;z-index:1;}
+#pg-home .hero h1{font-size:clamp(28px,4vw,52px);font-weight:800;letter-spacing:-.02em;margin:0 0 8px;text-shadow:0 4px 24px rgba(0,0,0,.5)}
+#pg-home .hero .meta{display:flex;gap:10px;color:rgba(255,255,255,.65);font-size:12px;letter-spacing:.04em;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+#pg-home .hero .meta .tag{padding:2px 8px;border:1px solid rgba(255,255,255,.3);border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.1em}
+#pg-home .hero .plot{max-width:520px;color:rgba(255,255,255,.72);font-size:13px;line-height:1.55;margin-bottom:18px}
+#pg-home .hero .ctas{display:flex;gap:8px;flex-wrap:wrap}
+
+/* sections */
+.section{padding:20px 28px 0;}
+.section-title{
+  position:relative;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  font-size:10px;color:rgba(255,255,255,.50);padding-bottom:5px;margin-bottom:14px;
+}
+.section-title::after{
+  content:"";position:absolute;left:0;bottom:0;width:2em;height:1.5px;
+  background:linear-gradient(90deg,var(--accent-500),transparent);border-radius:1px;
+}
+.card-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.card-row::-webkit-scrollbar{display:none}
+
+/* ── CARDS ── */
+@keyframes kmgScanLine{
+  from{transform:translateY(-110%);opacity:0}15%{opacity:1}85%{opacity:1}
+  to{transform:translateY(320%);opacity:0}
+}
+.card{
+  flex-shrink:0;position:relative;border-radius:12px;overflow:visible;
+  cursor:pointer;width:130px;
+}
+.card.landscape{width:200px}
+.card .scalable{
+  border-radius:12px;overflow:hidden;position:relative;
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 4px 14px rgba(0,0,0,.3);
+  transition:transform var(--dur-base) var(--ease-out),border-color var(--dur-base),box-shadow var(--dur-base);
+}
+.card:hover .scalable{
+  border-color:rgba(var(--accent-rgb),.70);
+  box-shadow:0 0 0 1px rgba(var(--accent-rgb),.5),0 10px 30px rgba(0,0,0,.5),0 0 40px rgba(var(--accent-rgb),.16);
+}
+.card:hover .scalable::after{
+  content:"";position:absolute;left:0;right:0;top:0;height:33%;z-index:6;pointer-events:none;
+  background:linear-gradient(180deg,transparent 0%,rgba(255,255,255,.03) 40%,rgba(var(--accent-rgb),.08) 50%,rgba(255,255,255,.03) 60%,transparent 100%);
+  animation:kmgScanLine .85s cubic-bezier(.65,0,.35,1) forwards;
+}
+.card .poster{aspect-ratio:2/3;background-size:cover;background-position:center;transition:transform .5s;}
+.card.landscape .poster{aspect-ratio:16/9}
+.card:hover .poster{transform:scale(1.025)}
+.card .c-footer{
+  position:absolute;left:0;right:0;bottom:0;padding:30px 8px 7px;
+  background:linear-gradient(0deg,rgba(0,0,0,.88) 0%,transparent 100%);
+}
+.card .c-title{font-size:11px;font-weight:600;}
+.card .c-sub{font-size:9px;color:rgba(255,255,255,.5);margin-top:1px;}
+.card .c-progress{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(0,0,0,.4);z-index:2;}
+.card .c-progress::after{content:"";display:block;height:100%;width:var(--p,0%);background:linear-gradient(90deg,var(--accent-500),var(--accent-300));}
+.card .c-played{
+  position:absolute;top:6px;right:6px;z-index:3;
+  width:20px;height:20px;border-radius:50%;
+  background:rgba(var(--bg-rgb),.75);backdrop-filter:blur(6px);
+  border:1px solid rgba(var(--accent-rgb),.5);
+  display:flex;align-items:center;justify-content:center;
+}
+.card .c-played .mi{font-size:12px;color:var(--accent-300);font-variation-settings:"FILL" 1,"wght" 500,"GRAD" 25,"opsz" 24}
+.badge{
+  position:absolute;top:6px;left:6px;z-index:3;
+  border-radius:0 6px 0 6px;background:rgba(var(--bg-rgb),.82);
+  backdrop-filter:blur(6px);border:1px solid rgba(var(--accent-rgb),.35);
+  color:var(--accent-300);font-size:7px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;padding:2px 5px;
+}
+.badge.hdr{background:rgba(255,140,0,.15);border-color:rgba(255,140,0,.4);color:#ffaa00}
+
+/* ───────── DETAIL PAGE ───────── */
+#pg-detail{position:relative;}
+#pg-detail .backdrop-wrap{
+  position:relative;height:420px;overflow:hidden;flex-shrink:0;
+}
+#pg-detail .backdrop-img{
+  position:absolute;inset:0;background-size:cover;background-position:center top;
+  filter:brightness(.45) saturate(105%);
+  -webkit-mask:linear-gradient(180deg,rgba(0,0,0,.85) 0%,60%,transparent 100%);
+  mask:linear-gradient(180deg,rgba(0,0,0,.85) 0%,60%,transparent 100%);
+}
+#pg-detail .backdrop-grad{
+  position:absolute;left:0;right:0;bottom:0;height:300px;
+  background:linear-gradient(0deg,var(--bg-0) 0%,rgba(var(--bg-rgb),.8) 45%,transparent 100%);
+}
+#pg-detail .detail-inner{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:0 28px 28px;display:flex;gap:24px;align-items:flex-end;
+}
+#pg-detail .detail-poster{
+  width:140px;flex-shrink:0;border-radius:var(--r-md);overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);box-shadow:0 12px 32px rgba(0,0,0,.6);
+}
+#pg-detail .detail-poster img{width:100%;display:block;}
+#pg-detail .detail-info{flex:1;padding-bottom:4px;}
+#pg-detail .detail-info .genres{
+  font-size:10px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;
+  color:var(--accent-300);margin-bottom:8px;
+}
+#pg-detail .detail-info h1{font-size:clamp(22px,3.5vw,40px);font-weight:800;letter-spacing:-.02em;margin-bottom:8px;line-height:1.1;}
+#pg-detail .detail-info .meta-row{
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  color:rgba(255,255,255,.65);font-size:11px;letter-spacing:.04em;margin-bottom:16px;
+}
+#pg-detail .detail-info .meta-row .rating{
+  background:rgba(var(--accent-rgb),.2);border:1px solid rgba(var(--accent-rgb),.35);
+  color:var(--accent-300);font-weight:700;padding:2px 8px;border-radius:4px;font-size:10px;
+}
+#pg-detail .detail-info .meta-row .sep{color:rgba(255,255,255,.25)}
+#pg-detail .detail-info .ctas{display:flex;gap:8px;flex-wrap:wrap;}
+
+#pg-detail .detail-body{padding:24px 28px 100px;}
+#pg-detail .detail-body .overview{
+  color:rgba(255,255,255,.72);font-size:13px;line-height:1.65;max-width:680px;margin-bottom:28px;
+}
+#pg-detail .media-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+#pg-detail .media-tag{
+  border-radius:0 8px 0 8px;background:rgba(var(--bg-rgb),.82);
+  backdrop-filter:blur(6px);border:1px solid rgba(var(--accent-rgb),.35);
+  color:var(--accent-300);font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;padding:3px 8px;
+}
+
+/* cast */
+.cast-grid{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.cast-grid::-webkit-scrollbar{display:none}
+.person{flex-shrink:0;width:80px;text-align:center;cursor:pointer;}
+.person .ph{width:80px;height:80px;border-radius:50%;background-size:cover;background-position:center;
+  border:1px solid rgba(255,255,255,.1);margin-bottom:6px;transition:.2s;}
+.person:hover .ph{border-color:var(--accent-300);transform:scale(1.05)}
+.person .pn{font-size:10px;font-weight:600;}
+.person .pr{font-size:9px;color:rgba(255,255,255,.45);margin-top:1px;}
+
+/* episodes */
+.ep-list{display:flex;flex-direction:column;gap:8px;}
+.ep-item{
+  display:flex;gap:12px;padding:12px;border-radius:var(--r-md);
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  cursor:pointer;transition:all var(--dur-base) var(--ease-out);align-items:center;
+}
+.ep-item:hover{background:rgba(var(--accent-rgb),.12);border-color:rgba(var(--accent-rgb),.3);}
+.ep-thumb{width:120px;height:68px;border-radius:8px;background-size:cover;background-position:center;flex-shrink:0;position:relative;overflow:hidden;}
+.ep-thumb .ep-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;background:rgba(0,0,0,.4);transition:.2s;}
+.ep-item:hover .ep-play{opacity:1}
+.ep-thumb .ep-play .mi{font-size:28px;color:#fff;font-variation-settings:"FILL" 1,"wght" 500,"GRAD" 0,"opsz" 24}
+.ep-info{flex:1;min-width:0;}
+.ep-num{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:3px;}
+.ep-title{font-size:12px;font-weight:600;margin-bottom:4px;}
+.ep-desc{font-size:11px;color:rgba(255,255,255,.5);line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.ep-dur{font-size:10px;color:rgba(255,255,255,.35);font-weight:600;flex-shrink:0;}
+
+/* ───────── LIBRARY PAGE ───────── */
+#pg-library .lib-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;
+  padding:24px 28px 100px;
+}
+
+/* ───────── ICONS PAGE ───────── */
+#pg-icons{padding:24px 28px 100px;}
+.icon-section{margin-bottom:28px;}
+.icon-section .label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px;}
+.icon-row{display:flex;flex-wrap:wrap;gap:10px;}
+.icon-cell{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:60px;}
+.icon-cell .cap{font-size:8px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.25);text-align:center;}
+.iw{width:42px;height:42px;border-radius:var(--r-sm);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);display:flex;align-items:center;justify-content:center;}
+.iw.acc{background:rgba(var(--accent-rgb),.18);border-color:rgba(var(--accent-rgb),.35);}
+.iw.red{background:rgba(220,38,38,.15);border-color:rgba(220,38,38,.35);}
+.iw .mi{font-size:20px}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:10px 20px;border-radius:var(--r-pill);
+  font-family:inherit;font-size:12px;font-weight:600;letter-spacing:.04em;
+  cursor:pointer;transition:all var(--dur-base) var(--ease-out);border:1px solid;
+  text-transform:uppercase;
+}
+.btn .mi{font-size:18px}
+.btn-primary{
+  background:linear-gradient(180deg,var(--accent-500),var(--accent-600));
+  color:#fff;border-color:var(--accent-300);
+  box-shadow:0 4px 12px rgba(var(--accent-rgb),.35),inset 0 1px 0 rgba(255,255,255,.15);
+}
+[data-theme="mono"] .btn-primary{background:linear-gradient(180deg,#fafafa,#d4d4d4);color:#0a0a0a;border-color:#fff}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(var(--accent-rgb),.5),0 0 32px rgba(var(--accent-rgb),.3);}
+.btn-primary .mi{color:#fff;font-variation-settings:"FILL" 1,"wght" 500,"GRAD" 0,"opsz" 24}
+.btn-ghost{
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.9);
+  border-color:rgba(255,255,255,.14);backdrop-filter:blur(12px);
+}
+.btn-ghost:hover{background:rgba(var(--accent-rgb),.3);border-color:var(--accent-300);}
+.btn-ghost:hover .mi{color:var(--accent-300);font-variation-settings:"FILL" 1,"wght" 400,"GRAD" 0,"opsz" 24}
+.btn-icon-only{width:40px;height:40px;padding:0;justify-content:center;}
+
+/* ── PLAYER BAR ── */
+.player-bar{
+  position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:100;
+  display:flex;align-items:center;gap:10px;padding:10px 16px;
+  background:rgba(var(--bg-rgb),.45);
+  backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);
+  border:1px solid rgba(255,255,255,.14);
+  border-top:1px solid rgba(255,255,255,.20);
+  border-radius:var(--r-pill);
+  box-shadow:0 8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.08);
+  min-width:380px;
+}
+.player-thumb{width:38px;height:38px;border-radius:8px;background:url('https://picsum.photos/seed/np1/80/80') center/cover;flex-shrink:0;}
+.player-info{flex:1;min-width:0;}
+.player-info .pt{font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.player-info .ps{font-size:9px;color:rgba(255,255,255,.45);letter-spacing:.04em;margin-top:1px;}
+.player-controls{display:flex;gap:2px;align-items:center;}
+.play-btn{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--accent-500);border:1px solid var(--accent-300);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:box-shadow var(--dur-base);flex-shrink:0;
+}
+[data-theme="mono"] .play-btn{background:#e5e5e5;border-color:#fff;}
+.play-btn:hover{box-shadow:0 0 20px rgba(var(--accent-rgb),.6)}
+.play-btn .mi{color:#fff;font-size:20px;font-variation-settings:"FILL" 1,"wght" 500,"GRAD" 0,"opsz" 24}
+[data-theme="mono"] .play-btn .mi{color:#0a0a0a}
+.ctrl-btn{
+  width:32px;height:32px;border-radius:50%;background:transparent;border:none;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:background var(--dur-base);
+}
+.ctrl-btn:hover{background:rgba(255,255,255,.08)}
+.ctrl-btn .mi{color:rgba(255,255,255,.60);font-size:18px}
+.ctrl-btn:hover .mi{color:rgba(255,255,255,.95);font-variation-settings:"FILL" 1,"wght" 400,"GRAD" 0,"opsz" 24}
+.ctrl-btn.active-ctrl .mi{color:var(--accent-300);font-variation-settings:"FILL" 1,"wght" 500,"GRAD" 25,"opsz" 24}
+.player-prog{position:absolute;left:16px;right:16px;bottom:4px;height:2px;background:rgba(255,255,255,.10);border-radius:99px;overflow:hidden;}
+.player-prog::after{content:"";display:block;height:100%;width:37%;background:linear-gradient(90deg,var(--accent-500),var(--accent-300));}
+
+/* ── SETTINGS LIST ── */
+.settings-list{display:flex;flex-direction:column;gap:2px;}
+.setting-row{
+  display:flex;align-items:center;gap:12px;padding:10px 14px;
+  border-radius:var(--r-md);cursor:pointer;transition:background var(--dur-base);
+}
+.setting-row:hover{background:rgba(255,255,255,.06)}
+.setting-icon{
+  width:36px;height:36px;flex-shrink:0;border-radius:var(--r-sm);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);
+  display:flex;align-items:center;justify-content:center;
+}
+.setting-icon .mi{font-variation-settings:"FILL" 0,"wght" 300,"GRAD" -25,"opsz" 24;color:rgba(255,255,255,.55)}
+.setting-row:hover .setting-icon .mi{color:rgba(255,255,255,.90);font-variation-settings:"FILL" 1,"wght" 400,"GRAD" 0,"opsz" 24}
+.setting-text .st{font-size:12px;font-weight:600}
+.setting-text .ss{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
+.setting-row .mi.chev{color:rgba(255,255,255,.20);font-size:16px}
+
+/* ── MISC ── */
+.sep{height:1px;background:rgba(255,255,255,.07);margin:20px 0}
+.page-pad{padding:0 28px 100px;}
+</style>
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <span class="lbl">Motyw</span>
+  <button class="tb-btn on" onclick="setTheme('',this)">Forest</button>
+  <button class="tb-btn" onclick="setTheme('marine',this)">Marine</button>
+  <button class="tb-btn" onclick="setTheme('brown',this)">Brown</button>
+  <button class="tb-btn" onclick="setTheme('mono',this)">Mono</button>
+  <span class="lbl" style="margin-left:10px">Podstrona</span>
+  <button class="tb-btn on" id="pbn-home"    onclick="goPage('home',this)">Home</button>
+  <button class="tb-btn"    id="pbn-detail"  onclick="goPage('detail',this)">Detail / Film</button>
+  <button class="tb-btn"    id="pbn-library" onclick="goPage('library',this)">Biblioteka</button>
+  <button class="tb-btn"    id="pbn-icons"   onclick="goPage('icons',this)">Ikony</button>
+</div>
+
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sb-logo"><span class="mi">movie</span> KubiMax Glass</div>
+
+    <div class="sb-section">Biblioteki</div>
+    <div class="nav-item active" onclick="navClick(this,'home')"><span class="mi dim">home</span>Strona główna</div>
+    <div class="nav-item" onclick="navClick(this,'library')"><span class="mi dim">movie</span>Filmy</div>
+    <div class="nav-item" onclick="navClick(this,'library')"><span class="mi dim">tv</span>Seriale</div>
+    <div class="nav-item" onclick="navClick(this,'library')"><span class="mi dim">music_note</span>Muzyka</div>
+    <div class="nav-item" onclick="navClick(this,'library')"><span class="mi dim">live_tv</span>Na żywo</div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section">Kolekcje</div>
+    <div class="nav-item" onclick="navClick(this,'library')"><span class="mi dim">favorite</span>Ulubione</div>
+    <div class="nav-item" onclick="navClick(this,'home')"><span class="mi dim">playlist_play</span>Kolejka</div>
+    <div class="nav-item" onclick="navClick(this,'home')"><span class="mi dim">history</span>Historia</div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section">System</div>
+    <div class="nav-item" onclick="navClick(this,'icons')"><span class="mi dim">settings</span>Ustawienia</div>
+    <div class="nav-item" onclick="navClick(this,'home')"><span class="mi dim">person</span>Profil</div>
+  </nav>
+
+  <!-- MAIN COLUMN -->
+  <div class="main-col">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="back-btn" id="back-btn" onclick="goPage('home',null)">
+        <span class="mi">arrow_back</span> Wstecz
+      </div>
+      <div class="breadcrumb" id="breadcrumb">Strona główna</div>
+      <div class="spacer"></div>
+      <div class="icon-btn"><span class="mi hdr">search</span></div>
+      <div class="icon-btn"><span class="mi hdr">cast</span></div>
+      <div class="icon-btn"><span class="mi hdr">person</span></div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- ═══ HOME ═══ -->
+      <div class="page" id="pg-home">
+
+        <div class="hero">
+          <div class="bg"></div>
+          <div class="inner">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-300);margin-bottom:8px">Polecane</div>
+            <h1>Dune: Part Two</h1>
+            <div class="meta">
+              <span class="tag">4K HDR</span>
+              <span>2024</span><span class="sep">·</span>
+              <span>2h 46m</span><span class="sep">·</span>
+              <span>⭐ 8.5</span><span class="sep">·</span>
+              <span>Sci-Fi · Przygoda</span>
+            </div>
+            <div class="plot">Paul Atreides jednoczy się z Chani i Fremenami, planując zemstę na tych, którzy zniszczyli jego rodzinę.</div>
+            <div class="ctas">
+              <button class="btn btn-primary" onclick="goPage('detail',null)"><span class="mi">play_arrow</span>Odtwórz</button>
+              <button class="btn btn-ghost"><span class="mi">add</span>Kolejka</button>
+              <button class="btn btn-ghost btn-icon-only"><span class="mi">more_horiz</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Kontynuuj oglądanie</div>
+          <div class="card-row">
+            <div class="card" onclick="goPage('detail',null)">
+              <div class="scalable">
+                <div class="badge">4K</div>
+                <div class="poster" style="background-image:url('https://picsum.photos/seed/c1/260/390')"></div>
+                <div class="c-progress" style="--p:68%"></div>
+                <div class="c-footer"><div class="c-title">Dune: Part Two</div><div class="c-sub">2024</div></div>
+              </div>
+            </div>
+            <div class="card" onclick="goPage('detail',null)">
+              <div class="scalable">
+                <div class="badge hdr">HDR</div>
+                <div class="c-played"><span class="mi">check</span></div>
+                <div class="poster" style="background-image:url('https://picsum.photos/seed/c2/260/390')"></div>
+                <div class="c-footer"><div class="c-title">Oppenheimer</div><div class="c-sub">2023</div></div>
+              </div>
+            </div>
+            <div class="card" onclick="goPage('detail',null)">
+              <div class="scalable">
+                <div class="poster" style="background-image:url('https://picsum.photos/seed/c3/260/390')"></div>
+                <div class="c-progress" style="--p:22%"></div>
+                <div class="c-footer"><div class="c-title">Poor Things</div><div class="c-sub">2023</div></div>
+              </div>
+            </div>
+            <div class="card" onclick="goPage('detail',null)">
+              <div class="scalable">
+                <div class="badge">1080p</div>
+                <div class="poster" style="background-image:url('https://picsum.photos/seed/c4/260/390')"></div>
+                <div class="c-footer"><div class="c-title">Killers of…</div><div class="c-sub">2023</div></div>
+              </div>
+            </div>
+            <div class="card" onclick="goPage('detail',null)">
+              <div class="scalable">
+                <div class="poster" style="background-image:url('https://picsum.photos/seed/c5/260/390')"></div>
+                <div class="c-progress" style="--p:45%"></div>
+                <div class="c-footer"><div class="c-title">Barbie</div><div class="c-sub">2023</div></div>
+              </div>
+            </div>
+            <div class="card" onclick="goPage('detail',null)">
+              <div class="scalable">
+                <div class="badge hdr">HDR</div>
+                <div class="poster" style="background-image:url('https://picsum.photos/seed/c6/260/390')"></div>
+                <div class="c-footer"><div class="c-title">The Zone of…</div><div class="c-sub">2023</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section" style="padding-top:20px">
+          <div class="section-title">Ostatnio dodane · Seriale</div>
+          <div class="card-row">
+            <div class="card landscape" onclick="goPage('detail',null)">
+              <div class="scalable">
+                <div class="badge">4K</div>
+                <div class="poster" style="background-image:url('https://picsum.photos/seed/s1/400/225')"></div>
+                <div class="c-footer"><div class="c-title">Severance S02</div><div class="c-sub">S02 · 10 odcinków</div></div>
+              </div>
+            </div>
+            <div class="card landscape" onclick="goPage('detail',null)">
+              <div class="scalable">
+                <div class="poster" style="background-image:url('https://picsum.photos/seed/s2/400/225')"></div>
+                <div class="c-footer"><div class="c-title">The Last of Us S02</div><div class="c-sub">S02 · 7 odcinków</div></div>
+              </div>
+            </div>
+            <div class="card landscape" onclick="goPage('detail',null)">
+              <div class="scalable">
+                <div class="badge hdr">HDR</div>
+                <div class="poster" style="background-image:url('https://picsum.photos/seed/s3/400/225')"></div>
+                <div class="c-footer"><div class="c-title">Stranger Things S05</div><div class="c-sub">Wkrótce</div></div>
+              </div>
+            </div>
+            <div class="card landscape" onclick="goPage('detail',null)">
+              <div class="scalable">
+                <div class="poster" style="background-image:url('https://picsum.photos/seed/s4/400/225')"></div>
+                <div class="c-footer"><div class="c-title">House of Dragon</div><div class="c-sub">S02 · 8 odcinków</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section" style="padding-top:20px">
+          <div class="section-title">Polecane filmy</div>
+          <div class="card-row">
+            <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/r1/260/390')"></div><div class="c-footer"><div class="c-title">Past Lives</div></div></div></div>
+            <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="badge hdr">HDR</div><div class="poster" style="background-image:url('https://picsum.photos/seed/r2/260/390')"></div><div class="c-footer"><div class="c-title">All of Us Strangers</div></div></div></div>
+            <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/r3/260/390')"></div><div class="c-footer"><div class="c-title">Anatomy of a Fall</div></div></div></div>
+            <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/r4/260/390')"></div><div class="c-footer"><div class="c-title">American Fiction</div></div></div></div>
+            <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/r5/260/390')"></div><div class="c-footer"><div class="c-title">Monster</div></div></div></div>
+            <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/r6/260/390')"></div><div class="c-footer"><div class="c-title">May December</div></div></div></div>
+          </div>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+
+      <!-- ═══ DETAIL ═══ -->
+      <div class="page" id="pg-detail">
+        <div class="backdrop-wrap">
+          <div class="backdrop-img" style="background-image:url('https://picsum.photos/seed/detail1/1400/600')"></div>
+          <div class="backdrop-grad"></div>
+          <div class="detail-inner">
+            <div class="detail-poster">
+              <img src="https://picsum.photos/seed/poster1/280/420" alt="poster">
+            </div>
+            <div class="detail-info">
+              <div class="genres">Sci-Fi · Przygoda · Dramat</div>
+              <h1>Dune: Part Two</h1>
+              <div class="meta-row">
+                <span class="rating">⭐ 8.5</span>
+                <span>2024</span><span class="sep">·</span>
+                <span>2h 46m</span><span class="sep">·</span>
+                <span>PG-13</span>
+              </div>
+              <div class="ctas">
+                <button class="btn btn-primary"><span class="mi">play_arrow</span>Odtwórz</button>
+                <button class="btn btn-ghost"><span class="mi">theaters</span>Zwiastun</button>
+                <button class="btn btn-ghost"><span class="mi">favorite_border</span>Ulubione</button>
+                <button class="btn btn-ghost btn-icon-only"><span class="mi">more_horiz</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-body">
+          <div class="media-tags">
+            <span class="media-tag">4K UHD</span>
+            <span class="media-tag">HDR10+</span>
+            <span class="media-tag">Dolby Atmos</span>
+            <span class="media-tag">H.265</span>
+            <span class="media-tag">HEVC</span>
+          </div>
+          <div class="overview">
+            Paul Atreides jednoczy się z Chani i Fremenami, planując zemstę na tych, którzy zniszczyli jego rodzinę. W obliczu wyboru między miłością do Chani a wypełnieniem swojego przeznaczenia, stara się zapobiec straszliwej przyszłości, którą może przynieść jedynie on.
+          </div>
+
+          <div class="section-title">Obsada</div>
+          <div class="cast-grid" style="margin-bottom:28px">
+            <div class="person"><div class="ph" style="background-image:url('https://picsum.photos/seed/p1/160/160')"></div><div class="pn">Timothée Chalamet</div><div class="pr">Paul Atreides</div></div>
+            <div class="person"><div class="ph" style="background-image:url('https://picsum.photos/seed/p2/160/160')"></div><div class="pn">Zendaya</div><div class="pr">Chani</div></div>
+            <div class="person"><div class="ph" style="background-image:url('https://picsum.photos/seed/p3/160/160')"></div><div class="pn">Rebecca Ferguson</div><div class="pr">Lady Jessica</div></div>
+            <div class="person"><div class="ph" style="background-image:url('https://picsum.photos/seed/p4/160/160')"></div><div class="pn">Josh Brolin</div><div class="pr">Gurney Halleck</div></div>
+            <div class="person"><div class="ph" style="background-image:url('https://picsum.photos/seed/p5/160/160')"></div><div class="pn">Austin Butler</div><div class="pr">Feyd-Rautha</div></div>
+            <div class="person"><div class="ph" style="background-image:url('https://picsum.photos/seed/p6/160/160')"></div><div class="pn">Florence Pugh</div><div class="pr">Irulan</div></div>
+          </div>
+
+          <div class="section-title">Więcej podobnych</div>
+          <div class="card-row" style="margin-bottom:28px">
+            <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/sim1/260/390')"></div><div class="c-footer"><div class="c-title">Dune (2021)</div></div></div></div>
+            <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/sim2/260/390')"></div><div class="c-footer"><div class="c-title">Interstellar</div></div></div></div>
+            <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/sim3/260/390')"></div><div class="c-footer"><div class="c-title">Arrival</div></div></div></div>
+            <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/sim4/260/390')"></div><div class="c-footer"><div class="c-title">Blade Runner 2049</div></div></div></div>
+            <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/sim5/260/390')"></div><div class="c-footer"><div class="c-title">Annihilation</div></div></div></div>
+          </div>
+
+          <div class="section-title">Szczegóły</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:12px;color:rgba(255,255,255,.6);max-width:500px">
+            <div><span style="color:rgba(255,255,255,.3);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Reżyser</span><div style="margin-top:2px;color:#fff">Denis Villeneuve</div></div>
+            <div><span style="color:rgba(255,255,255,.3);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Studio</span><div style="margin-top:2px;color:#fff">Legendary Entertainment</div></div>
+            <div><span style="color:rgba(255,255,255,.3);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Premiera</span><div style="margin-top:2px;color:#fff">1 marca 2024</div></div>
+            <div><span style="color:rgba(255,255,255,.3);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Kraj</span><div style="margin-top:2px;color:#fff">USA / Kanada</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ LIBRARY ═══ -->
+      <div class="page" id="pg-library">
+        <div class="section" style="padding-top:24px">
+          <div class="section-title">Filmy · 847 tytułów</div>
+        </div>
+        <div class="lib-grid">
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="badge">4K</div><div class="poster" style="background-image:url('https://picsum.photos/seed/l1/260/390')"></div><div class="c-footer"><div class="c-title">Dune: Part Two</div><div class="c-sub">2024</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="c-played"><span class="mi">check</span></div><div class="poster" style="background-image:url('https://picsum.photos/seed/l2/260/390')"></div><div class="c-footer"><div class="c-title">Oppenheimer</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/l3/260/390')"></div><div class="c-footer"><div class="c-title">Poor Things</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="badge hdr">HDR</div><div class="poster" style="background-image:url('https://picsum.photos/seed/l4/260/390')"></div><div class="c-footer"><div class="c-title">Killers of the…</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/l5/260/390')"></div><div class="c-footer"><div class="c-title">Barbie</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="c-played"><span class="mi">check</span></div><div class="poster" style="background-image:url('https://picsum.photos/seed/l6/260/390')"></div><div class="c-footer"><div class="c-title">The Zone of…</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/l7/260/390')"></div><div class="c-footer"><div class="c-title">Past Lives</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="badge">4K</div><div class="poster" style="background-image:url('https://picsum.photos/seed/l8/260/390')"></div><div class="c-footer"><div class="c-title">All of Us…</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/l9/260/390')"></div><div class="c-footer"><div class="c-title">Anatomy of a Fall</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/l10/260/390')"></div><div class="c-footer"><div class="c-title">American Fiction</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="badge hdr">HDR</div><div class="poster" style="background-image:url('https://picsum.photos/seed/l11/260/390')"></div><div class="c-footer"><div class="c-title">Monster</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/l12/260/390')"></div><div class="c-footer"><div class="c-title">May December</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/l13/260/390')"></div><div class="c-footer"><div class="c-title">Saltburn</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="c-played"><span class="mi">check</span></div><div class="poster" style="background-image:url('https://picsum.photos/seed/l14/260/390')"></div><div class="c-footer"><div class="c-title">Ferrari</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="badge">4K</div><div class="poster" style="background-image:url('https://picsum.photos/seed/l15/260/390')"></div><div class="c-footer"><div class="c-title">Napoleon</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/l16/260/390')"></div><div class="c-footer"><div class="c-title">Maestro</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="poster" style="background-image:url('https://picsum.photos/seed/l17/260/390')"></div><div class="c-footer"><div class="c-title">Origin</div><div class="c-sub">2023</div></div></div></div>
+          <div class="card" onclick="goPage('detail',null)"><div class="scalable"><div class="badge hdr">HDR</div><div class="poster" style="background-image:url('https://picsum.photos/seed/l18/260/390')"></div><div class="c-footer"><div class="c-title">The Boy and the Heron</div><div class="c-sub">2023</div></div></div></div>
+        </div>
+      </div>
+
+      <!-- ═══ ICONS ═══ -->
+      <div class="page" id="pg-icons">
+        <div class="icon-section">
+          <div class="label">Stany ikon — FILL 0→1 · wght · kolor</div>
+          <div class="icon-row">
+            <div class="icon-cell"><div class="iw"><span class="mi" style="font-size:20px">home</span></div><span class="cap">bazowy<br>FILL 0</span></div>
+            <div class="icon-cell"><div class="iw"><span class="mi hdr" style="font-size:20px">search</span></div><span class="cap">header<br>70%</span></div>
+            <div class="icon-cell"><div class="iw"><span class="mi filled" style="font-size:20px">play_arrow</span></div><span class="cap">filled<br>FILL 1</span></div>
+            <div class="icon-cell"><div class="iw acc"><span class="mi active" style="font-size:20px">check_circle</span></div><span class="cap">active<br>accent</span></div>
+            <div class="icon-cell"><div class="iw acc"><span class="mi active" style="font-size:20px">favorite</span></div><span class="cap">ulubione<br>accent</span></div>
+            <div class="icon-cell"><div class="iw"><span class="mi dim" style="font-size:20px">settings</span></div><span class="cap">sidebar<br>55%</span></div>
+            <div class="icon-cell"><div class="iw"><span class="mi" style="font-variation-settings:'FILL' 0,'wght' 200,'GRAD' -50,'opsz' 48;font-size:20px;color:rgba(255,255,255,.20)">image</span></div><span class="cap">placeholder<br>20%</span></div>
+            <div class="icon-cell"><div class="iw acc"><span class="mi active" style="font-size:20px">star</span></div><span class="cap">rating<br>accent</span></div>
+            <div class="icon-cell"><div class="iw red"><span class="mi" style="font-size:20px;color:#f87171;font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 25,'opsz' 24">delete</span></div><span class="cap">destructive<br>red</span></div>
+          </div>
+        </div>
+        <div class="sep"></div>
+        <div class="label" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px">Ustawienia · Ghost tile icons</div>
+        <div class="settings-list" style="max-width:420px">
+          <div class="setting-row"><div class="setting-icon"><span class="mi">display_settings</span></div><div class="setting-text"><div class="st">Wyświetlacz</div><div class="ss">Jasność, jakość wideo</div></div><span class="mi chev">chevron_right</span></div>
+          <div class="setting-row"><div class="setting-icon"><span class="mi">audio_settings</span></div><div class="setting-text"><div class="st">Dźwięk</div><div class="ss">Wyjście audio, normalizacja</div></div><span class="mi chev">chevron_right</span></div>
+          <div class="setting-row"><div class="setting-icon"><span class="mi">manage_accounts</span></div><div class="setting-text"><div class="st">Użytkownicy</div><div class="ss">Zarządzanie profilami</div></div><span class="mi chev">chevron_right</span></div>
+          <div class="setting-row"><div class="setting-icon"><span class="mi">notifications_active</span></div><div class="setting-text"><div class="st">Powiadomienia</div><div class="ss">Push, e-mail</div></div><span class="mi chev">chevron_right</span></div>
+          <div class="setting-row"><div class="setting-icon"><span class="mi">palette</span></div><div class="setting-text"><div class="st">Wygląd</div><div class="ss">Motyw, kolory akcentu</div></div><span class="mi chev">chevron_right</span></div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main-col -->
+</div><!-- /shell -->
+
+<!-- PLAYER BAR -->
+<div class="player-bar">
+  <div class="player-thumb"></div>
+  <div class="player-info">
+    <div class="pt">Dune: Part Two</div>
+    <div class="ps">01:14:33 · 2h 46m pozostało</div>
+  </div>
+  <div class="player-controls">
+    <div class="ctrl-btn"><span class="mi">skip_previous</span></div>
+    <div class="play-btn"><span class="mi">pause</span></div>
+    <div class="ctrl-btn"><span class="mi">skip_next</span></div>
+    <div class="ctrl-btn active-ctrl"><span class="mi">closed_caption</span></div>
+    <div class="ctrl-btn"><span class="mi">tune</span></div>
+    <div class="ctrl-btn"><span class="mi">fullscreen</span></div>
+  </div>
+  <div class="player-prog"></div>
+</div>
+
+<script>
+const PAGES = {
+  home:    {bc:'Strona główna',       nav:'Strona główna'},
+  detail:  {bc:'Filmy / <span>Dune: Part Two</span>', nav:'Filmy'},
+  library: {bc:'Filmy',              nav:'Filmy'},
+  icons:   {bc:'Ustawienia / <span>Ikony</span>', nav:'Ustawienia'},
+};
+
+function goPage(name, triggerBtn) {
+  document.documentElement.dataset.page = name;
+  document.getElementById('breadcrumb').innerHTML = PAGES[name].bc;
+  const backBtn = document.getElementById('back-btn');
+  backBtn.style.display = (name !== 'home') ? 'flex' : 'none';
+  // sync toolbar buttons
+  document.querySelectorAll('[id^="pbn-"]').forEach(b => b.classList.remove('on'));
+  const tb = document.getElementById('pbn-' + name);
+  if (tb) tb.classList.add('on');
+  // sync nav
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.textContent.trim().startsWith(PAGES[name].nav)) n.classList.add('active');
+  });
+  document.querySelector('.content').scrollTop = 0;
+}
+
+function navClick(el, page) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  goPage(page, null);
+}
+
+function setTheme(t, btn) {
+  document.documentElement.dataset.theme = t;
+  document.querySelectorAll('.toolbar .tb-btn').forEach(b => {
+    if (['Forest','Marine','Brown','Mono'].some(x => b.textContent === x)) b.classList.remove('on');
+  });
+  btn.classList.add('on');
+}
+</script>
+</body>
+</html>
