@@ -177,7 +177,152 @@ h2 { font-size: 1.5em; }
 .material-icons,
 .md-icon {
     font-family: var(--iconPack), "Material Icons Round", sans-serif !important;
-    font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" -25, "opsz" 24;
+    color: rgba(255,255,255,0.62);
+    transition: color var(--dur-fast), font-variation-settings var(--dur-fast);
+}
+
+/* ================================================================
+   MONOCHROMATIC ICONS
+   Outlined by default (FILL 0); filled for active/played/focused.
+   All icons unified to white spectrum — no colored backgrounds.
+   Note: FILL/wght/GRAD only take effect with Material Symbols Rounded.
+   With Material Icons Round (default) only `color` applies.
+   ================================================================ */
+
+/* ── Sidebar navigation ──────────────────────────────────────── */
+.navMenuOptionIcon,
+.navMenuOption .material-icons {
+    color: rgba(255,255,255,0.55);
+    font-variation-settings: "FILL" 0, "wght" 250, "GRAD" -25, "opsz" 24;
+    transition: color var(--dur-base) var(--ease-out),
+                font-variation-settings var(--dur-base) var(--ease-out);
+}
+.navMenuOption-selected .navMenuOptionIcon,
+.navMenuOption-selected .material-icons,
+.navMenuOption:focus .navMenuOptionIcon {
+    color: var(--accent-300) !important;
+    font-variation-settings: "FILL" 1, "wght" 500, "GRAD" 25, "opsz" 24;
+}
+
+/* ── Header / app-bar icon buttons ──────────────────────────── */
+.headerButton .material-icons,
+.paper-icon-button-light .material-icons {
+    color: rgba(255,255,255,0.70);
+    font-variation-settings: "FILL" 0, "wght" 250, "GRAD" -25, "opsz" 24;
+}
+
+/* ── Detail page action buttons ─────────────────────────────── */
+.detailButton-icon,
+.detailButton .material-icons {
+    color: rgba(255,255,255,0.82);
+    font-variation-settings: "FILL" 0, "wght" 350, "GRAD" -10, "opsz" 24;
+    transition: color var(--dur-base), font-variation-settings var(--dur-base);
+}
+
+/* ── Card overlay (play / info on hover) ────────────────────── */
+.cardOverlayButtonIcon,
+.cardOverlayButton .material-icons {
+    color: rgba(255,255,255,0.93);
+    font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* ── Primary action icons (Play, Submit) — always filled ─────── */
+.btnPlay .material-icons,
+.button-submit .material-icons,
+.btnManual .material-icons {
+    color: #ffffff;
+    font-variation-settings: "FILL" 1, "wght" 500, "GRAD" 0, "opsz" 24;
+}
+
+/* ── Playstate: watched ──────────────────────────────────────── */
+.playstatebutton-icon-played,
+.playstatebutton-icon-played .material-icons {
+    color: var(--accent-300) !important;
+    font-variation-settings: "FILL" 1, "wght" 500, "GRAD" 25, "opsz" 24;
+}
+
+/* ── Rating: has rating ──────────────────────────────────────── */
+.ratingbutton-icon-withrating,
+.ratingbutton-icon-withrating .material-icons {
+    color: var(--accent-300) !important;
+    font-variation-settings: "FILL" 1, "wght" 500, "GRAD" 25, "opsz" 24;
+}
+
+/* ── Active tab icons ────────────────────────────────────────── */
+.emby-tab-button.is-active .material-icons,
+.emby-tab-button-active .material-icons {
+    color: var(--accent-300) !important;
+    font-variation-settings: "FILL" 1, "wght" 500, "GRAD" 0, "opsz" 24;
+}
+
+/* ── Settings list item icons — ghost tile ───────────────────── */
+.listItemIcon:not(.listItemIcon-transparent) {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(255,255,255,0.10) !important;
+    color: rgba(255,255,255,0.60) !important;
+    border-radius: var(--r-sm) !important;
+}
+
+/* ── Card placeholder icon (no artwork) ──────────────────────── */
+.cardImageIcon,
+.cardImageIcon .material-icons {
+    color: rgba(255,255,255,0.20) !important;
+    font-variation-settings: "FILL" 0, "wght" 200, "GRAD" -50, "opsz" 48;
+}
+
+/* ── Player OSD controls ─────────────────────────────────────── */
+.btnSelectAudio .material-icons,
+.btnSubtitles .material-icons,
+.btnSelectSubtitles .material-icons,
+.btnVideoOsdMenu .material-icons,
+.btnVideoOsdSettings .material-icons {
+    color: rgba(255,255,255,0.70);
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" -25, "opsz" 24;
+}
+
+/* ── Hover: fill icon and brighten on pointer devices ────────── */
+@media (hover: hover) and (pointer: fine) {
+    .paper-icon-button-light:hover .material-icons,
+    .headerButton:hover .material-icons,
+    .emby-button:hover .material-icons {
+        color: rgba(255,255,255,0.96) !important;
+        font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+    .detailButton:hover .detailButton-icon,
+    .detailButton:hover .material-icons {
+        color: var(--accent-300) !important;
+        font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+    .navMenuOption:hover .navMenuOptionIcon,
+    .navMenuOption:hover .material-icons {
+        color: rgba(255,255,255,0.90);
+        font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+}
+
+/* ── TV: larger, crisper icons ───────────────────────────────── */
+.layout-tv .navMenuOptionIcon,
+.layout-tv .navMenuOption .material-icons {
+    font-size: 1.3em;
+    color: rgba(255,255,255,0.65);
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" -25, "opsz" 24;
+}
+.layout-tv .navMenuOption-selected .navMenuOptionIcon,
+.layout-tv .navMenuOption:focus .navMenuOptionIcon {
+    color: var(--accent-300) !important;
+    font-variation-settings: "FILL" 1, "wght" 500, "GRAD" 25, "opsz" 24;
+}
+.layout-tv .headerButton .material-icons,
+.layout-tv .paper-icon-button-light .material-icons {
+    font-size: 1.15em;
+    color: rgba(255,255,255,0.72);
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" -25, "opsz" 24;
+}
+.layout-tv .detailButton-icon,
+.layout-tv .detailButton .material-icons {
+    font-size: 1.1em;
+    color: rgba(255,255,255,0.88);
 }
 
 /* ================================================================
@@ -228,18 +373,62 @@ body:has(#itemDetailPage:not(.hide)) .backgroundContainer.withBackdrop {
 }
 
 /* ================================================================
+   SECTION TITLES — futuristic terminal readout style
+   ================================================================ */
+.sectionTitle,
+.sectionTitleContainer .sectionTitle {
+    font-weight: 700 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    font-size: 0.72em !important;
+    color: rgba(255,255,255,0.60) !important;
+    position: relative;
+    padding-bottom: 0.3em;
+}
+.sectionTitle::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 2em;
+    height: 1.5px;
+    background: linear-gradient(90deg, var(--accent-500), transparent);
+    border-radius: 1px;
+}
+
+/* ================================================================
    HEADER / APP BAR
    ================================================================ */
 .skinHeader,
 .skinHeader-withBackground {
     container-type: inline-size;
     container-name: skinHeader;
+    position: relative;
     min-height: var(--appBarHeight);
     background: var(--headerColor) !important;
     -webkit-backdrop-filter: var(--blurLarge);
     backdrop-filter: var(--blurLarge);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 8px 24px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.03), 0 8px 28px rgba(0,0,0,0.30);
+}
+/* Thin accent gradient line across header bottom */
+.skinHeader::after,
+.skinHeader-withBackground::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(var(--accent-rgb), 0.45) 25%,
+        rgba(var(--accent-rgb), 0.65) 50%,
+        rgba(var(--accent-rgb), 0.45) 75%,
+        transparent 100%
+    );
+    pointer-events: none;
 }
 
 /* Hide section tabs (Suggested / Genres) when header is narrow */
@@ -303,8 +492,15 @@ body:has(#itemDetailPage:not(.hide)) .skinHeader-withBackground {
    CARD ENTRY ANIMATION
    ================================================================ */
 @keyframes kmgCardIn {
-    from { opacity: 0; transform: translateY(-5px) scale(0.985); }
+    from { opacity: 0; transform: translateY(10px) scale(0.975); }
     to   { opacity: 1; transform: none; }
+}
+
+@keyframes kmgScanLine {
+    from { transform: translateY(-110%); opacity: 0; }
+    15%  { opacity: 1; }
+    85%  { opacity: 1; }
+    to   { transform: translateY(320%); opacity: 0; }
 }
 
 /* ================================================================
@@ -369,14 +565,37 @@ body:has(#itemDetailPage:not(.hide)) .skinHeader-withBackground {
 @media (hover: hover) and (pointer: fine) {
     .card-hoverable:hover .cardScalable,
     .card-hoverable:hover .visualCardBox {
-        border-color: var(--accent-300) !important;
+        border-color: rgba(var(--accent-rgb), 0.7) !important;
         box-shadow:
-            0 0 0 1px rgba(var(--accent-rgb), 0.6),
-            0 12px 32px rgba(0,0,0,0.5),
-            0 0 40px rgba(var(--accent-rgb), 0.25);
+            0 0 0 1px rgba(var(--accent-rgb), 0.55),
+            0 12px 36px rgba(0,0,0,0.55),
+            0 0 48px rgba(var(--accent-rgb), 0.18);
     }
     .card-hoverable:hover .cardImageContainer {
         transform: scale(1.025);
+    }
+    /* Scan-line sweep on hover — futuristic data-read effect */
+    .card-hoverable:hover .cardScalable {
+        position: relative;
+    }
+    .card-hoverable:hover .cardScalable::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 33%;
+        background: linear-gradient(
+            180deg,
+            transparent 0%,
+            rgba(255,255,255,0.03) 40%,
+            rgba(var(--accent-rgb),0.08) 50%,
+            rgba(255,255,255,0.03) 60%,
+            transparent 100%
+        );
+        animation: kmgScanLine 0.85s var(--ease-in-out) forwards;
+        pointer-events: none;
+        z-index: 6;
     }
     .button-submit:hover,
     .btnPlay:hover {
@@ -751,23 +970,24 @@ progress,
 }
 
 /* ================================================================
-   MEDIA FORMAT BADGES — asymmetric "peel" corners
-   One corner rounded diagonally = corner "sticker" feel.
+   MEDIA FORMAT BADGES — HUD data-tag style
+   Asymmetric peel corners + terminal readout aesthetic.
    ================================================================ */
 .mediaSourceIndicator,
 .resolutionIndicator,
 .videoQualityBadge,
 .mediaInfoTag {
     border-radius: 0 var(--r-sm) 0 var(--r-sm) !important;
-    background: rgba(var(--bg-rgb), 0.72) !important;
+    background: rgba(var(--bg-rgb), 0.80) !important;
     -webkit-backdrop-filter: var(--blurSmallest);
     backdrop-filter: var(--blurSmallest);
-    border: 1px solid rgba(var(--accent-rgb), 0.28) !important;
+    border: 1px solid rgba(var(--accent-rgb), 0.35) !important;
     color: var(--accent-300) !important;
-    font-size: 0.7em;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    padding: 0.15em 0.45em !important;
+    font-size: 0.65em;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    padding: 0.15em 0.5em !important;
 }
 /* Played / watched indicator — bottom-right peel */
 .playedIndicator { border-radius: 0 0 var(--r-md) 0 !important; }
@@ -1104,19 +1324,30 @@ input[type="range"]::-webkit-slider-runnable-track {
 
 /* ── TV Sidebar nav ─────────────────────────────────────────── */
 .layout-tv .mainDrawer {
-    border-right: 1px solid rgba(255,255,255,0.1);
+    border-right: 1px solid rgba(255,255,255,0.08);
 }
 .layout-tv .navMenuOption {
     min-height: var(--touch-min);
     padding: 0 1.5em;
-    transition: background var(--dur-base) var(--ease-out), border-color var(--dur-base);
+    border-left: 3px solid transparent;
+    border-radius: 0 var(--r-sm) var(--r-sm) 0 !important;
+    margin: 2px var(--sidePadding) 2px 0;
+    transition:
+        background var(--dur-base) var(--ease-out),
+        border-color var(--dur-base),
+        transform var(--dur-base) var(--ease-out);
 }
 .layout-tv .navMenuOption:focus,
 .layout-tv .navMenuOption-selected {
-    background: rgba(var(--accent-rgb), 0.28) !important;
-    border-left: 3px solid var(--accent-300) !important;
+    background: rgba(var(--accent-rgb), 0.18) !important;
+    border-left: 3px solid var(--accent-400) !important;
     color: var(--accent-100) !important;
     outline: none !important;
+    transform: translateX(4px);
+}
+.layout-tv .navMenuOption-selected {
+    background: rgba(var(--accent-rgb), 0.24) !important;
+    border-left-color: var(--accent-300) !important;
 }
 
 /* ── TV Detail page — compensate for always-visible sidebar ── */
@@ -1132,23 +1363,24 @@ input[type="range"]::-webkit-slider-runnable-track {
 
 /* ── TV FOCUS SYSTEM ────────────────────────────────────────── */
 
-/* Cards */
+/* Cards — glow + scale */
 .layout-tv .card-hoverable:focus .cardScalable,
 .layout-tv .card:focus .cardScalable,
 .layout-tv .card-hoverable:focus-within .cardScalable {
-    outline: 3px solid var(--accent-300) !important;
-    outline-offset: 2px !important;
+    outline: 2px solid rgba(var(--accent-rgb), 0.8) !important;
+    outline-offset: 3px !important;
     border-color: var(--accent-300) !important;
     box-shadow:
-        0 0 0 5px rgba(var(--accent-rgb), 0.4),
-        0 0 32px rgba(var(--accent-rgb), 0.55),
-        0 8px 32px rgba(0,0,0,0.5) !important;
+        0 0 0 5px rgba(var(--accent-rgb), 0.32),
+        0 0 40px rgba(var(--accent-rgb), 0.50),
+        0 10px 36px rgba(0,0,0,0.55) !important;
     transform: scale(1.06) !important;
     overflow: visible !important;
     z-index: 2;
 }
 .layout-tv .card-hoverable:focus,
 .layout-tv .card:focus { z-index: 2; outline: none !important; }
+
 
 /* All interactive buttons + links */
 .layout-tv .emby-button:focus,
